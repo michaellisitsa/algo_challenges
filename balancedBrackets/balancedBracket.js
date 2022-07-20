@@ -1,4 +1,29 @@
 "use strict";
+function TimeIt() {
+  var self = this;
+
+  function howLong(iterations, testFunction) {
+    var results = [];
+    var total = 0;
+    for (var i = 0; i < iterations; i++) {
+      var start = performance.now();
+      testFunction();
+      var end = performance.now();
+      var duration = end - start;
+      results.push(duration);
+      total += duration;
+    }
+    var result = {
+      results: results,
+      total: total,
+      avg: total / results.length,
+    };
+    return result;
+  }
+  self.howLong = howLong;
+}
+
+var timeit = new TimeIt();
 
 const fs = require("fs");
 const dotenv = require("dotenv");
@@ -23,9 +48,9 @@ function readLine() {
 }
 
 class LinkedNode {
-  constructor(value) {
+  constructor(value, next) {
     this.value = value;
-    this.next = null;
+    this.next = next;
   }
 
   toString() {
@@ -52,7 +77,7 @@ class LinkedList {
     return linkedListArr;
   }
 
-  deleteHead() {
+  deleteTail() {
     if (this.head === null) {
       return null;
     }
@@ -90,6 +115,49 @@ class LinkedList {
     prevTail.next = this.tail;
     return newNode;
   }
+
+  prepend(value) {
+    const newNode = new LinkedNode(value, this.head);
+    this.head = newNode;
+
+    // If there is no tail yet let's make new node a tail.
+    if (!this.tail) {
+      this.tail = newNode;
+    }
+
+    return newNode;
+  }
+
+  deleteHead() {
+    if (!this.head) {
+      return null;
+    }
+
+    const deletedHead = this.head;
+
+    if (this.head.next) {
+      this.head = this.head.next;
+    } else {
+      this.head = null;
+      this.tail = null;
+    }
+
+    return deletedHead;
+  }
+
+  peekHead() {
+    if (this.head === null) {
+      return null;
+    }
+    return this.head.value;
+  }
+
+  peekTail() {
+    if (this.tail === null) {
+      return null;
+    }
+    return this.tail.value;
+  }
 }
 
 /*
@@ -111,7 +179,26 @@ function isBalanced(s) {
     }
 
     if (closeBrackets.indexOf(char) !== -1) {
-      if (char !== stack.tail?.value) {
+      if (char !== stack.peekTail()) {
+        isBalanced = false;
+        break;
+      }
+      stack.deleteTail();
+    }
+  }
+  return isBalanced && stack.head === null ? "YES" : "NO";
+}
+
+function isBalancedPrepend(s) {
+  const stack = new LinkedList();
+  let isBalanced = true;
+  for (let char of s) {
+    if (openBrackets.indexOf(char) !== -1) {
+      stack.prepend(closeBrackets[openBrackets.indexOf(char)]);
+    }
+
+    if (closeBrackets.indexOf(char) !== -1) {
+      if (char !== stack.peekHead()) {
         isBalanced = false;
         break;
       }
@@ -120,27 +207,33 @@ function isBalanced(s) {
   }
   return isBalanced && stack.head === null ? "YES" : "NO";
 }
+
 // process.env.OUTPUT_PATH = `${process.cwd()}/out.txt`
 function main() {
   const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
 
-  const t = parseInt(readLine().trim(), 10);
+  // const t = parseInt(readLine().trim(), 10);
   // UNCOMMENT IF READING FROM FILE
-  // const t = 1;
+  const t = 1;
 
   for (let tItr = 0; tItr < t; tItr++) {
-    const s = readLine();
+    // const s = readLine();
     // UNCOMMENT IF READING FROM FILE
-    // const s = fs.readFileSync(
-    //   `/Users/michaellisitsa/Documents/learning/algo_challenges/balancedBrackets/long_sample.txt`,
-    //   "utf8"
-    // );
+    const s = fs.readFileSync(
+      `/Users/michaellisitsa/Documents/learning/algo_challenges/balancedBrackets/deeply_nested.txt`,
+      "utf8"
+    );
 
-    const result = isBalanced(s);
+    const result = isBalancedPrepend(s);
+    // const result = isBalanced(s);
 
     ws.write(result + "\n");
-    console.log(s, " is ", result === "YES" ? "balanced" : "unbalanced");
+    // Console log stuffs up timing for long nested bracket test.
+    // console.log(s, " is ", result === "YES" ? "balanced" : "unbalanced");
   }
 
   ws.end();
 }
+var result = timeit.howLong(1, main);
+console.log("avg: " + result.avg);
+console.log("total: " + result.total);
