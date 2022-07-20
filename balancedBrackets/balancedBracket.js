@@ -170,7 +170,7 @@ class LinkedList {
 const openBrackets = ["[", "{", "("];
 const closeBrackets = ["]", "}", ")"];
 
-function isBalanced(s) {
+function isBalancedAppend(s) {
   const stack = new LinkedList();
   let isBalanced = true;
   for (let char of s) {
@@ -208,28 +208,55 @@ function isBalancedPrepend(s) {
   return isBalanced && stack.head === null ? "YES" : "NO";
 }
 
+function isBalancedList(s) {
+  let stack = [];
+  for (const char of s) {
+    // Use our stack to keep track of open brackets.
+    if ("([{".includes(char)) {
+      stack.push(char);
+      continue; // Shortcut this iteration;
+    }
+
+    // If we find a close bracket and the top
+    // of the stack doesn't match, then the
+    // brackets aren't balanced, we can bail out.
+    if (
+      (char === ")" && stack.pop() !== "(") ||
+      (char === "]" && stack.pop() !== "[") ||
+      (char === "}" && stack.pop() !== "{")
+    ) {
+      return "NO";
+    }
+  }
+
+  // Make sure our stack is empty and we don't
+  // have any leftover brackets.
+  return stack.length === 0 ? "YES" : "NO";
+}
+
 // process.env.OUTPUT_PATH = `${process.cwd()}/out.txt`
 function main() {
   const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
 
-  // const t = parseInt(readLine().trim(), 10);
-  // UNCOMMENT IF READING FROM FILE
-  const t = 1;
+  // CHOOSE WHETHER TO READ FROM FILE OR FROM COMMAND LINE
+  // const t = parseInt(readLine().trim(), 10); // CMDLINE
+  const t = 1; // FILE
 
   for (let tItr = 0; tItr < t; tItr++) {
-    // const s = readLine();
-    // UNCOMMENT IF READING FROM FILE
+    // CHOOSE WHETHER TO READ FROM FILE OR FROM COMMAND LINE
+    // const s = readLine(); // CMDLINE
     const s = fs.readFileSync(
-      `/Users/michaellisitsa/Documents/learning/algo_challenges/balancedBrackets/deeply_nested.txt`,
+      `${process.env.CURRENT_DIR}/deeply_nested.txt`,
       "utf8"
-    );
+    ); // FILE
 
+    // CHOOSE WHICH TEST TO RUN
     const result = isBalancedPrepend(s);
-    // const result = isBalanced(s);
+    // const result = isBalancedAppend(s);
+    // const result = isBalancedList(s);
 
     ws.write(result + "\n");
-    // Console log stuffs up timing for long nested bracket test.
-    // console.log(s, " is ", result === "YES" ? "balanced" : "unbalanced");
+    console.log(tItr + 1, ":", result === "YES" ? "balanced" : "unbalanced");
   }
 
   ws.end();
