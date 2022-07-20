@@ -125,10 +125,12 @@ function main() {
   const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
 
   const t = parseInt(readLine().trim(), 10);
+  // UNCOMMENT IF READING FROM FILE
   // const t = 1;
 
   for (let tItr = 0; tItr < t; tItr++) {
     const s = readLine();
+    // UNCOMMENT IF READING FROM FILE
     // const s = fs.readFileSync(
     //   `/Users/michaellisitsa/Documents/learning/algo_challenges/balancedBrackets/long_sample.txt`,
     //   "utf8"
