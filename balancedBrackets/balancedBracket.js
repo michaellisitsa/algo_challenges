@@ -28,36 +28,31 @@ class LinkedNode {
     this.next = null;
   }
 
-  toString = () => {
+  toString() {
     return this.value;
-  };
+  }
 }
 
 class LinkedList {
-  head = null;
-  tail = null;
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
 
-  toArray = () => {
+  toArray() {
     let currentNode = this.head;
     if (currentNode === this.tail) {
       return [currentNode.toString()];
     }
     const linkedListArr = [];
     while (currentNode !== this.tail) {
-      linkedListArr.push(currentNode.toString());
+      linkedListArr.append(currentNode.toString());
       currentNode = currentNode.next;
     }
     return linkedListArr;
-  };
+  }
 
-  peek = () => {
-    if (this.head === null) {
-      return null;
-    }
-    return this.tail.value;
-  };
-
-  pop = () => {
+  deleteHead() {
     if (this.head === null) {
       return null;
     }
@@ -81,9 +76,9 @@ class LinkedList {
     this.tail = currentNode;
     this.tail.next = null;
     return deletedNode;
-  };
+  }
 
-  push = (value) => {
+  append(value) {
     const newNode = new LinkedNode(value);
     if (this.head === null) {
       this.head = newNode;
@@ -94,7 +89,7 @@ class LinkedList {
     this.tail = newNode;
     prevTail.next = this.tail;
     return newNode;
-  };
+  }
 }
 
 /*
@@ -112,32 +107,37 @@ function isBalanced(s) {
   let isBalanced = true;
   for (let char of s) {
     if (openBrackets.indexOf(char) !== -1) {
-      const pushedChar = stack.push(closeBrackets[openBrackets.indexOf(char)]);
+      stack.append(closeBrackets[openBrackets.indexOf(char)]);
     }
 
     if (closeBrackets.indexOf(char) !== -1) {
-      if (char !== stack.peek()) {
+      if (char !== stack.tail?.value) {
         isBalanced = false;
         break;
       }
-      stack.pop();
+      stack.deleteHead();
     }
   }
-  return isBalanced && stack.head === null ? "TRUE" : "FALSE";
+  return isBalanced && stack.head === null ? "YES" : "NO";
 }
 // process.env.OUTPUT_PATH = `${process.cwd()}/out.txt`
 function main() {
   const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
 
   const t = parseInt(readLine().trim(), 10);
+  // const t = 1;
 
   for (let tItr = 0; tItr < t; tItr++) {
     const s = readLine();
+    // const s = fs.readFileSync(
+    //   `/Users/michaellisitsa/Documents/learning/algo_challenges/balancedBrackets/long_sample.txt`,
+    //   "utf8"
+    // );
 
     const result = isBalanced(s);
 
     ws.write(result + "\n");
-    console.log(s, " is ", result === "TRUE" ? "balanced" : "unbalanced");
+    console.log(s, " is ", result === "YES" ? "balanced" : "unbalanced");
   }
 
   ws.end();
