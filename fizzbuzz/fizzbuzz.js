@@ -81,5 +81,4 @@ function main() {
     console.log(
       !(a % 15) ? "fizzbuzz" : !(a % 3) ? "fizz" : !(a % 5) ? "buzz" : a
     );
-  }
-}
+}};
