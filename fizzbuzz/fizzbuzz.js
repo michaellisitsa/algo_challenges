@@ -76,7 +76,8 @@ function mainStart() {
 
 //
 function main() {
-  for (a = 1; a <= 100; a++) {
+  a = 1;
+  while (a++ < 101) {
     console.log(
       !(a % 15) ? "fizzbuzz" : !(a % 3) ? "fizz" : !(a % 5) ? "buzz" : a
     );
