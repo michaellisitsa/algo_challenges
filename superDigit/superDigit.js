@@ -12,12 +12,9 @@ function superDigit(n, k) {
       (accum, current) => parseInt(current) + accum,
       0
     );
-  function recursiveSuperDigit(s) {
-    const currentSuperDigit = sumDigits(s);
-    return currentSuperDigit.toString().length > 1
-      ? recursiveSuperDigit(currentSuperDigit)
-      : currentSuperDigit;
+  function recurse(s) {
+    return s.toString().length > 1 ? recurse(sumDigits(s)) : s;
   }
-  return recursiveSuperDigit(sumDigits(n) * k);
+  return recurse(sumDigits(sumDigits(n) * k));
 }
 console.log(superDigit("912", 8));
