@@ -21,11 +21,25 @@ function compareDifferentArrays(firstArr, secondArr) {
   }, []);
 }
 
+const reverseRange = (start, end) => {
+  let output = [];
+  if (typeof end === "undefined") {
+    end = start;
+    start = 0;
+  }
+  for (let i = start; i <= end; i += 1) {
+    output.push(i);
+  }
+  return output.reverse();
+};
+
 function almostSorted(arr) {
   const sortedArr = [...arr].sort((a, b) => a - b);
   const unorderedIndexes = compareDifferentArrays(arr, sortedArr);
-  if (unorderedIndexes.length > 2) {
-    return "no";
+  const unorderedValues = unorderedIndexes.map((idx) => arr[idx]);
+  console.log("unordered values:", unorderedValues);
+  if (unorderedIndexes.length === 0) {
+    return "yes";
   } else if (unorderedIndexes.length === 2) {
     const swappedArr = [...arr];
     [swappedArr[unorderedIndexes[0]], swappedArr[unorderedIndexes[1]]] = [
@@ -38,10 +52,33 @@ function almostSorted(arr) {
     if (compareDifferentArrays(sortedArr, swappedArr).length === 0) {
       return `yes\nswap ${unorderedIndexesOneIndexed.join(" ")}`;
     }
+  } else if (
+    unorderedIndexes.length > 2 &&
+    compareDifferentArrays(
+      unorderedValues,
+      reverseRange(Math.min(...unorderedValues), Math.max(...unorderedValues))
+    ).length === 0
+  ) {
+    let reversedArr = [...arr];
+    reversedArr.splice(
+      unorderedIndexes[0],
+      unorderedIndexes.length,
+      ...unorderedValues.reverse()
+    );
+    if (compareDifferentArrays(reversedArr, sortedArr).length === 0) {
+      return `yes\nreverse ${unorderedIndexes[0]} ${
+        unorderedIndexes[unorderedIndexes.length - 1]
+      }`;
+    }
+    return "no";
   }
 }
 
+/*
+
+*/
+
 // const returned = almostSorted([4, 2]);
-const returned = almostSorted([3, 1, 2]);
+const returned = almostSorted([4, 3, 2, 1, 5]);
 // const returned = almostSorted([7, 2, 3, 4, 5, 1]);
 console.log("returned", returned);
