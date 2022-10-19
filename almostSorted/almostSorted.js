@@ -46,7 +46,7 @@ function almostSorted(arr) {
       swappedArr[unorderedIndexes[0]],
     ];
     if (compareDifferentArrays(sortedArr, swappedArr).length === 0) {
-      return `yes\nswap ${unorderedIndexes[0]} ${unorderedIndexes[1]}`;
+      return `yes\nswap ${unorderedIndexes[0] + 1} ${unorderedIndexes[1] + 1}`;
     }
   } else if (
     unorderedIndexes.length > 2 &&
@@ -65,10 +65,56 @@ function almostSorted(arr) {
       return `yes\nreverse ${unorderedIndexes[0] + 1} ${
         unorderedIndexes[unorderedIndexes.length - 1] + 1
       }`;
+    } else {
+      return "no";
     }
+  } else {
     return "no";
   }
-  return "no";
+}
+
+function almostSortedStdOut(arr) {
+  const sortedArr = [...arr].sort((a, b) => a - b);
+  const unorderedIndexes = compareDifferentArrays(arr, sortedArr);
+  const unorderedValues = unorderedIndexes.map((idx) => arr[idx]);
+  if (unorderedIndexes.length === 0) {
+    console.log("yes");
+  } else if (unorderedIndexes.length === 2) {
+    const swappedArr = [...arr];
+    [swappedArr[unorderedIndexes[0]], swappedArr[unorderedIndexes[1]]] = [
+      swappedArr[unorderedIndexes[1]],
+      swappedArr[unorderedIndexes[0]],
+    ];
+    if (compareDifferentArrays(sortedArr, swappedArr).length === 0) {
+      console.log(
+        `yes\nswap ${unorderedIndexes[0] + 1} ${unorderedIndexes[1] + 1}`
+      );
+    }
+  } else if (
+    unorderedIndexes.length > 2 &&
+    compareDifferentArrays(
+      unorderedValues,
+      reverseRange(Math.min(...unorderedValues), Math.max(...unorderedValues))
+    ).length === 0
+  ) {
+    let reversedArr = [...arr];
+    reversedArr.splice(
+      unorderedIndexes[0],
+      unorderedIndexes.length,
+      ...unorderedValues.reverse()
+    );
+    if (compareDifferentArrays(reversedArr, sortedArr).length === 0) {
+      console.log(
+        `yes\nreverse ${unorderedIndexes[0] + 1} ${
+          unorderedIndexes[unorderedIndexes.length - 1] + 1
+        }`
+      );
+    } else {
+      console.log("no");
+    }
+  } else {
+    console.log("no");
+  }
 }
 
 /*
