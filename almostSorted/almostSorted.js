@@ -46,11 +46,8 @@ function almostSorted(arr) {
       swappedArr[unorderedIndexes[1]],
       swappedArr[unorderedIndexes[0]],
     ];
-    const unorderedIndexesOneIndexed = unorderedIndexes.map(
-      (index) => index + 1
-    );
     if (compareDifferentArrays(sortedArr, swappedArr).length === 0) {
-      return `yes\nswap ${unorderedIndexesOneIndexed.join(" ")}`;
+      return `yes\nswap ${unorderedIndexes[0]} ${unorderedIndexes[1]}`;
     }
   } else if (
     unorderedIndexes.length > 2 &&
@@ -66,8 +63,8 @@ function almostSorted(arr) {
       ...unorderedValues.reverse()
     );
     if (compareDifferentArrays(reversedArr, sortedArr).length === 0) {
-      return `yes\nreverse ${unorderedIndexes[0]} ${
-        unorderedIndexes[unorderedIndexes.length - 1]
+      return `yes\nreverse ${unorderedIndexes[0] + 1} ${
+        unorderedIndexes[unorderedIndexes.length - 1] + 1
       }`;
     }
     return "no";
@@ -78,7 +75,7 @@ function almostSorted(arr) {
 
 */
 
-// const returned = almostSorted([4, 2]);
-const returned = almostSorted([4, 3, 2, 1, 5]);
-// const returned = almostSorted([7, 2, 3, 4, 5, 1]);
+// const returned = almostSorted([4, 2]); // Expect swap 1 2
+// const returned = almostSorted([4, 3, 2, 1, 5]); // Expect reverse 1 4
+const returned = almostSorted([1, 5, 4, 3, 2, 6]); // expect reverse 2 5
 console.log("returned", returned);
