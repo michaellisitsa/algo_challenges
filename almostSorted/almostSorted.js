@@ -37,7 +37,6 @@ function almostSorted(arr) {
   const sortedArr = [...arr].sort((a, b) => a - b);
   const unorderedIndexes = compareDifferentArrays(arr, sortedArr);
   const unorderedValues = unorderedIndexes.map((idx) => arr[idx]);
-  console.log("unordered values:", unorderedValues);
   if (unorderedIndexes.length === 0) {
     return "yes";
   } else if (unorderedIndexes.length === 2) {
@@ -69,6 +68,7 @@ function almostSorted(arr) {
     }
     return "no";
   }
+  return "no";
 }
 
 /*
