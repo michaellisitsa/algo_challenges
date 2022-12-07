@@ -1,41 +1,51 @@
-function move(grid, traversers, goalX, goalY) {
+function move(grid, traversers, goalX, goalY, moves) {
   // Move walker one in each orthogonal directions, stopping at walls or "X" or a number already.
   let i = 0;
   while (i < traversers.length) {
     let traverser = traversers[i];
     let position =
-      traverser.direction === "vertical" ? traverser.y : traverser.x;
+      traverser.direction === "up" || traverser.direction === "down"
+        ? traverser.y
+        : traverser.x;
     function currentLocationIndex() {
-      if (traverser.direction === "vertical") {
+      if (traverser.direction === "up" || traverser.direction === "down") {
         return [traverser.x, position];
       } else {
         return [position, traverser.y];
       }
     }
     function nextLocationIndex() {
-      if (traverser.direction === "vertical") {
-        return [traverser.x, position + 1];
-      } else {
-        return [position + 1, traverser.y];
+      switch (traverser.direction) {
+        case "up":
+          return [traverser.x, position - 1];
+        case "down":
+          return [traverser.x, position + 1];
+        case "left":
+          return [position - 1, traverser.y];
+        case "right":
+          return [position + 1, traverser.y];
       }
     }
-    const nextLocationValue = () =>
-      grid[nextLocationIndex()[1]][nextLocationIndex()[0]];
+    console.log("next location", nextLocationIndex());
+    const nextLocationValue = () => {
+      try {
+        return grid[nextLocationIndex()[1]][nextLocationIndex()[0]];
+      } catch (e) {
+        return "X";
+      }
+    };
     // const value = nextLocationValue();
     // const index = nextLocationIndex();
     // - If moved 1 place, mark set end location with 1.
     // - If move 2 places, mark this and traversed location as 1.
     while (
       position < grid.length - 1 &&
+      position >= 0 &&
       nextLocationValue() === "." &&
       nextLocationIndex() !== [goalX, goalY] &&
       isNaN(nextLocationValue())
     ) {
-      if (traverser.direction === "vertical") {
-        grid[position + 1][traverser.y] = 1;
-      } else {
-        grid[traverser.x][position + 1] = 1;
-      }
+      grid[nextLocationIndex()[1]][nextLocationIndex()[0]] = moves;
       position += 1;
     }
     const currentLocation = currentLocationIndex();
@@ -55,6 +65,14 @@ function move(grid, traversers, goalX, goalY) {
       return grid[currentLocation[1]][currentLocation[0]];
     }
   }
+  // let newTraversers = [];
+  // traversers.forEach(traverser => {
+  //   newTraversers.push({
+
+  //   })
+  // })
+  //
+  // return move(grid, moves + 1);
 }
 
 function minimumMoves(grid, startX, startY, goalX, goalY) {
@@ -67,17 +85,27 @@ function minimumMoves(grid, startX, startY, goalX, goalY) {
       // - current position of walker
       x: startX,
       y: startY,
-      // - axes of next move
-      direction: "vertical",
+      // - direction of next move
+      direction: "up",
     },
     {
       x: startX,
       y: startY,
-      direction: "horizontal",
+      direction: "down",
+    },
+    {
+      x: startX,
+      y: startY,
+      direction: "left",
+    },
+    {
+      x: startX,
+      y: startY,
+      direction: "right",
     },
   ];
 
-  return move(newGrid, traversers, goalX, goalY);
+  return move(newGrid, traversers, goalX, goalY, 1);
   // Check if the goal is marked with a 1. return.
   // Set the current position and axes of next move
   // For each of the walkers, move in each of the orthogonal directions
