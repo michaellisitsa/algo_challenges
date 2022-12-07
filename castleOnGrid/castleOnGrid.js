@@ -1,22 +1,4 @@
-function minimumMoves(grid, startX, startY, goalX, goalY) {
-  // Mark current location as "X"
-  const newGrid = grid.map((row) => row.split(""));
-  newGrid[startY][startX] = 0;
-  // Have array of 2 walkers, each having a:
-  const traversers = [
-    {
-      // - current position of walker
-      x: startX,
-      y: startY,
-      // - axes of next move
-      direction: "vertical",
-    },
-    {
-      x: startX,
-      y: startY,
-      direction: "horizontal",
-    },
-  ];
+function move(grid, traversers, goalX, goalY) {
   // Move walker one in each orthogonal directions, stopping at walls or "X" or a number already.
   let i = 0;
   while (i < traversers.length) {
@@ -38,7 +20,7 @@ function minimumMoves(grid, startX, startY, goalX, goalY) {
       }
     }
     const nextLocationValue = () =>
-      newGrid[nextLocationIndex()[1]][nextLocationIndex()[0]];
+      grid[nextLocationIndex()[1]][nextLocationIndex()[0]];
     // const value = nextLocationValue();
     // const index = nextLocationIndex();
     // - If moved 1 place, mark set end location with 1.
@@ -50,9 +32,9 @@ function minimumMoves(grid, startX, startY, goalX, goalY) {
       isNaN(nextLocationValue())
     ) {
       if (traverser.direction === "vertical") {
-        newGrid[position + 1][traverser.y] = 1;
+        grid[position + 1][traverser.y] = 1;
       } else {
-        newGrid[traverser.x][position + 1] = 1;
+        grid[traverser.x][position + 1] = 1;
       }
       position += 1;
     }
@@ -70,9 +52,32 @@ function minimumMoves(grid, startX, startY, goalX, goalY) {
 
     // If reached destination, return from function.
     if (currentLocation[0] === goalX && currentLocation[1] === goalY) {
-      return newGrid[currentLocation[1]][currentLocation[0]];
+      return grid[currentLocation[1]][currentLocation[0]];
     }
   }
+}
+
+function minimumMoves(grid, startX, startY, goalX, goalY) {
+  // Mark current location as "X"
+  const newGrid = grid.map((row) => row.split(""));
+  newGrid[startY][startX] = 0;
+  // Have array of 2 walkers, each having a:
+  const traversers = [
+    {
+      // - current position of walker
+      x: startX,
+      y: startY,
+      // - axes of next move
+      direction: "vertical",
+    },
+    {
+      x: startX,
+      y: startY,
+      direction: "horizontal",
+    },
+  ];
+
+  return move(newGrid, traversers, goalX, goalY);
   // Check if the goal is marked with a 1. return.
   // Set the current position and axes of next move
   // For each of the walkers, move in each of the orthogonal directions
