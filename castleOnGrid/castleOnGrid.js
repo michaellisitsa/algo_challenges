@@ -26,10 +26,9 @@ function move(grid, traversers, goalX, goalY, moves) {
           return [position + 1, traverser.y];
       }
     }
-    console.log("next location", nextLocationIndex());
     const nextLocationValue = () => {
       try {
-        return grid[nextLocationIndex()[1]][nextLocationIndex()[0]];
+        return grid[nextLocationIndex()[0]][nextLocationIndex()[1]];
       } catch (e) {
         return "X";
       }
@@ -47,7 +46,7 @@ function move(grid, traversers, goalX, goalY, moves) {
       nextLocationIndex() !== [goalX, goalY] &&
       isNaN(nextLocationValue())
     ) {
-      grid[nextLocationIndex()[1]][nextLocationIndex()[0]] = moves;
+      grid[nextLocationIndex()[0]][nextLocationIndex()[1]] = moves;
       position = positiveDirection ? position + 1 : position - 1;
     }
     const currentLocation = currentLocationIndex();
@@ -66,7 +65,7 @@ function move(grid, traversers, goalX, goalY, moves) {
 
     // If reached destination, return from function.
     if (currentLocation[0] === goalX && currentLocation[1] === goalY) {
-      return grid[currentLocation[1]][currentLocation[0]];
+      return grid[currentLocation[0]][currentLocation[1]];
     }
   }
   let newTraversers = [];
@@ -95,14 +94,13 @@ function move(grid, traversers, goalX, goalY, moves) {
       });
     }
   });
-  console.log("newTraversers", newTraversers);
   return move(grid, newTraversers, goalX, goalY, moves + 1);
 }
 
 function minimumMoves(grid, startX, startY, goalX, goalY) {
   // Mark current location as "X"
   const newGrid = grid.map((row) => row.split(""));
-  newGrid[startY][startX] = 0;
+  newGrid[startX][startY] = 0;
   // Have array of 2 walkers, each having a:
   const traversers = [
     {
