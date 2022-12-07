@@ -34,19 +34,21 @@ function move(grid, traversers, goalX, goalY, moves) {
         return "X";
       }
     };
+    // const location = nextLocationValue();
     // const value = nextLocationValue();
     // const index = nextLocationIndex();
     // - If moved 1 place, mark set end location with 1.
     // - If move 2 places, mark this and traversed location as 1.
+    const positiveDirection =
+      traverser.direction === "right" || traverser.direction === "down";
     while (
-      position < grid.length - 1 &&
-      position >= 0 &&
+      (positiveDirection ? position < grid.length - 1 : position > 0) &&
       nextLocationValue() === "." &&
       nextLocationIndex() !== [goalX, goalY] &&
       isNaN(nextLocationValue())
     ) {
       grid[nextLocationIndex()[1]][nextLocationIndex()[0]] = moves;
-      position += 1;
+      position = positiveDirection ? position + 1 : position - 1;
     }
     const currentLocation = currentLocationIndex();
     // - If moved 0 places, delete walker.
@@ -57,6 +59,8 @@ function move(grid, traversers, goalX, goalY, moves) {
       traversers.splice(i, 1);
     } else {
       // Go to next traverser
+      traverser.x = currentLocation[0];
+      traverser.y = currentLocation[1];
       i++;
     }
 
@@ -65,14 +69,34 @@ function move(grid, traversers, goalX, goalY, moves) {
       return grid[currentLocation[1]][currentLocation[0]];
     }
   }
-  // let newTraversers = [];
-  // traversers.forEach(traverser => {
-  //   newTraversers.push({
-
-  //   })
-  // })
-  //
-  // return move(grid, moves + 1);
+  let newTraversers = [];
+  traversers.forEach((traverser) => {
+    const location = {
+      x: traverser.x,
+      y: traverser.y,
+    };
+    if (traverser.direction === "up" || traverser.direction === "down") {
+      newTraversers.push({
+        ...location,
+        direction: "left",
+      });
+      newTraversers.push({
+        ...location,
+        direction: "right",
+      });
+    } else {
+      newTraversers.push({
+        ...location,
+        direction: "up",
+      });
+      newTraversers.push({
+        ...location,
+        direction: "down",
+      });
+    }
+  });
+  console.log("newTraversers", newTraversers);
+  return move(grid, newTraversers, goalX, goalY, moves + 1);
 }
 
 function minimumMoves(grid, startX, startY, goalX, goalY) {
@@ -119,4 +143,4 @@ function minimumMoves(grid, startX, startY, goalX, goalY) {
 
 const grid = [".X.", ".X.", "..."];
 
-console.log("answer", minimumMoves(grid, 0, 0, 0, 2));
+console.log("answer", minimumMoves(grid, 0, 0, 2, 0));
