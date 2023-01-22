@@ -12,14 +12,29 @@ def powerSum(X: int, N: int) -> int:
     # Get Nth Root of X e.g. X**(1/N)
     nthRoot: float = X ** (1 / N)
     # print(nthRoot.is_integer())
-    if nthRoot.is_integer():
-        print("success", nthRoot)
-        return 1
+    if int(nthRoot) == 1:
+        return 0
+    elif nthRoot.is_integer():
+        # print("success", nthRoot)
+        # print("new X: ", X - (int(nthRoot) - 1) ** N)
+        return 1 + powerSum(
+            X - (int(nthRoot) - 1) ** N,
+            N,
+        )
     else:
         # Floor the nthRoot
         nthRootFloor: int = int(nthRoot)
-        XLVL1: int = X - (nthRootFloor - 1) ** N
-        return 0 + powerSum(XLVL1, N)
+        XLVL1: int = X - nthRootFloor**N
+        rootXLVL1 = XLVL1 ** (1 / N)
+        recurse = X - int(nthRoot) ** N
+
+        if rootXLVL1 >= nthRootFloor:
+            return 0 + powerSum(
+                recurse,
+                N,
+            )
+        else:
+            return 0 + powerSum(XLVL1, N)
 
 
-powerSum(13, 2)
+print(powerSum(100, 2))
