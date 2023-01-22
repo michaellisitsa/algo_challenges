@@ -8,33 +8,43 @@
 #
 
 
-def powerSum(X: int, N: int) -> int:
+def powerSum(X: int, N: int, maxNum: int | None = None) -> int:
     # Get Nth Root of X e.g. X**(1/N)
     nthRoot: float = X ** (1 / N)
-    # print(nthRoot.is_integer())
-    if int(nthRoot) == 1:
-        return 0
-    elif nthRoot.is_integer():
-        # print("success", nthRoot)
-        # print("new X: ", X - (int(nthRoot) - 1) ** N)
-        return 1 + powerSum(
-            X - (int(nthRoot) - 1) ** N,
-            N,
-        )
-    else:
-        # Floor the nthRoot
-        nthRootFloor: int = int(nthRoot)
-        XLVL1: int = X - nthRootFloor**N
-        rootXLVL1 = XLVL1 ** (1 / N)
-        recurse = X - int(nthRoot) ** N
+    # if int(nthRoot) > 1, we should kick off calculations for each of the smaller numbers.
+    # return powerSum(X=result(nthRoot - 1),N)
 
-        if rootXLVL1 >= nthRootFloor:
-            return 0 + powerSum(
-                recurse,
-                N,
-            )
+    i: int = min(int(nthRoot), maxNum) if maxNum is not None else int(nthRoot)
+    sum: int = 0
+    # if nthRoot.is_integer():
+    #     # print("success", nthRoot)
+    #     # print("new X: ", X - (int(nthRoot) - 1) ** N)
+    #     sum += 1
+    while i > 1:
+        if i == int(nthRoot) and nthRoot.is_integer():
+            # print("success", nthRoot)
+            # print("new X: ", X - (int(nthRoot) - 1) ** N)
+            sum += 1
         else:
-            return 0 + powerSum(XLVL1, N)
+            # print(nthRoot.is_integer())
+            # Floor the nthRoot
+            XLVL1: int = X - i**N
+            rootXLVL1 = XLVL1 ** (1 / N)
+            if rootXLVL1 >= i:
+                sum += powerSum(XLVL1 - (i - 1) ** N, N, maxNum=i - 2)
+                # pass
+            else:
+                sum += powerSum(XLVL1, N, maxNum=i - 1)
+        i -= 1
+    return sum
 
 
 print(powerSum(100, 2))
+
+
+# def sum(a: int, b: int):
+#     return a + b
+
+
+# def sumArr(arr: list[int]) -> int:
+#     return sum(sumArr())

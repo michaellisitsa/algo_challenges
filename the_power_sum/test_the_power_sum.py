@@ -7,6 +7,16 @@ class TestPowerSum:
         # sqrt(100) == 10
         assert powerSum(100, 2) > 0
 
+    def test_sqrt_100_has_exactly_3_solutions(self):
+        # At least one solution has been found
+        # sqrt(100) == 10
+        assert powerSum(100, 2) == 3
+
+    def test_cubed_root_100_has_exactly_1_solutions(self):
+        # At least one solution has been found
+        # sqrt(100) == 10
+        assert powerSum(100, 3) == 1
+
     def test_sqrt_13_has_exactly_1_solution(self):
         # 2^2 + 3^2 == 13
         assert powerSum(13, 2) == 1
