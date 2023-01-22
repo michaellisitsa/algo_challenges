@@ -8,7 +8,7 @@
 #
 
 
-def powerSum(X: int, N: int):
+def powerSum(X: int, N: int) -> int:
     # Get Nth Root of X e.g. X**(1/N)
     nthRoot: float = X ** (1 / N)
     # print(nthRoot.is_integer())
@@ -19,14 +19,7 @@ def powerSum(X: int, N: int):
         # Floor the nthRoot
         nthRootFloor: int = int(nthRoot)
         XLVL1: int = X - (nthRootFloor - 1) ** N
-        print(f"XLVL1: {XLVL1}")
-        nthRootLVL1: float = XLVL1 ** (1 / N)
-        if nthRootLVL1.is_integer():
-            print("success lvl1", nthRootLVL1)
-            return 1
-        else:
-            print("not success lvl1")
-            return 0
+        return 0 + powerSum(XLVL1, N)
 
 
 powerSum(13, 2)
