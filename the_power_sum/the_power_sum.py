@@ -20,21 +20,17 @@ def powerSum(X: int, N: int, maxNum: int | None = None) -> int:
     #     # print("success", nthRoot)
     #     # print("new X: ", X - (int(nthRoot) - 1) ** N)
     #     sum += 1
-    while i > 1:
+    while i > 0:
         if i == int(nthRoot) and nthRoot.is_integer():
             # print("success", nthRoot)
             # print("new X: ", X - (int(nthRoot) - 1) ** N)
             sum += 1
-        else:
+        elif i != 1:
             # print(nthRoot.is_integer())
             # Floor the nthRoot
             XLVL1: int = X - i**N
             rootXLVL1 = XLVL1 ** (1 / N)
-            if rootXLVL1 >= i:
-                sum += powerSum(XLVL1 - (i - 1) ** N, N, maxNum=i - 2)
-                # pass
-            else:
-                sum += powerSum(XLVL1, N, maxNum=i - 1)
+            sum += powerSum(XLVL1, N, maxNum=i - 1)
         i -= 1
     return sum
 
