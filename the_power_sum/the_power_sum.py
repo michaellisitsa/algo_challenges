@@ -9,13 +9,15 @@
 
 
 def powerSum(X: int, N: int, maxNum: int | None = None) -> int:
-    # Get Nth Root of X
+    # The largest unique integer can be no larger.
     nthRoot: float = X ** (1 / N)
 
-    # ensure only powers of unique numbers
-    # numbers above maxNum have been used already.
-    # even if the nthRoot is larger than the maxNum
-    i: int = min(int(nthRoot), maxNum) if maxNum is not None else int(nthRoot)
+    i: int = int(nthRoot)
+
+    # ensure only powers of unique numbers can be used.
+    # i.e. numbers above maxNum have been used already.
+    if maxNum is not None:
+        i = min(i, maxNum)
 
     sum: int = 0
 
