@@ -20,3 +20,8 @@ class TestTwoStacks:
         depth, currentSum = stack_depth_not_exceeding_sum([1, 3], 2)
         assert depth == 1
         assert currentSum == 1  # which is different to maxSum=2
+
+    def test_original_stack_length_not_modified(self):
+        original_stack = [1, 3]
+        stack_depth_not_exceeding_sum(original_stack, 2)
+        assert len(original_stack) == 2
