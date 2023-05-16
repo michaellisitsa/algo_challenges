@@ -33,7 +33,7 @@ def stack_depth_not_exceeding_sum(stack: list[int], max_sum: int):
 
 def twoStacks(maxSum: int, a: list[int], b: list[int]):
     # Get the max depth of the a stack only
-    max_depth, currentSum = stack_depth_not_exceeding_sum(a, maxSum)
+    max_depth, _ = stack_depth_not_exceeding_sum(a, maxSum)
 
     # We are working with a copy of a.
     # Only the max depth is ever accessed,
@@ -43,15 +43,17 @@ def twoStacks(maxSum: int, a: list[int], b: list[int]):
     while len(a_copy) > 0:
         # We first get the sum of the current length of the stack.
         sum = sum_stack(a_copy)
-        print("a: ", a_copy)
+
         # Start pulling from pile b
-        max_depth_of_b, b_sum = stack_depth_not_exceeding_sum(b, maxSum - sum)
-        print("b:", b[:max_depth_of_b])
+        max_depth_of_b, _ = stack_depth_not_exceeding_sum(b, maxSum - sum)
+
+        # Store new max depth
+        new_depth = len(a_copy) + max_depth_of_b
+        max_depth = new_depth if new_depth > max_depth else max_depth
+
         # Once exhausted, get a with the bottom value popped off.
         a_copy.pop()
-    # Record the max score once you exceed maxSum
-    # Now dig depth-2, and start pulling from pile b.
-    # rinse and repeat.
+    return max_depth
 
 
 print(twoStacks(10, [1, 3, 2, 4, 6, 7, 8], [1, 2, 3]))
