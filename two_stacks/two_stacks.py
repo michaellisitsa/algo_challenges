@@ -10,21 +10,23 @@ from queue import LifoQueue
 #
 
 
+def stack_depth_not_exceeding_sum(stack: list[int], max_sum: int):
+    depth = 0
+    current_sum = 0
+    stack_copy = stack.copy()
+    while current_sum + stack_copy[0] <= max_sum:
+        depth += 1
+        current_sum += stack_copy.pop(0)
+    return (
+        depth,
+        current_sum,
+    )
+
+
 def twoStacks(maxSum: int, a: list[int], b: list[int]):
-    # a_stack = LifoQueue(maxsize=len(a))
-    # b_stack = LifoQueue(maxsize=len(b))
+    # Get the max depth of the a stack only
+    max_depth_of_a, a_sum = stack_depth_not_exceeding_sum(a, maxSum)
 
-    # Dig down as far as possible in a, until  maxSum is exceeded.
-    a_depth = 0
-    a_sum = 0
-    a_copy = a.copy()
-    while a_sum <= maxSum:
-        a_depth += 1
-        a_sum += a_copy.pop(0)
-
-    a_depth = a_depth - 1 if a_depth > 0 else 0
-    return a_depth
-    # Record how far you dug, say depth
     # Now dig depth-1, and start pulling from pile b.
     # Record the max score once you exceed maxSum
     # Now dig depth-2, and start pulling from pile b.
