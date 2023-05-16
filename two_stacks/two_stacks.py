@@ -10,6 +10,14 @@ from queue import LifoQueue
 #
 
 
+def sum_stack(stack: list[int]):
+    sum = 0
+    stack_copy = stack.copy()
+    while len(stack_copy) > 0:
+        sum += stack_copy.pop(0)
+    return sum
+
+
 def stack_depth_not_exceeding_sum(stack: list[int], max_sum: int):
     depth = 0
     current_sum = 0
