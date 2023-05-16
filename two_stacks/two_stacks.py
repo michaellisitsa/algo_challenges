@@ -50,6 +50,9 @@ def twoStacks(maxSum: int, a: list[int], b: list[int]):
         new_depth = len(a_copy) + max_depth_of_b
         max_depth = new_depth if new_depth > max_depth else max_depth
 
+        # Stop iterating if we have exhausted the b list
+        if max_depth_of_b == len(b):
+            break
         # Once exhausted, get a with the bottom value popped off.
         a_copy.pop()
 
