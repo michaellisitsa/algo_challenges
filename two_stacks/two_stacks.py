@@ -19,10 +19,12 @@ def sum_stack(stack: list[int]):
 
 
 def stack_depth_not_exceeding_sum(stack: list[int], max_sum: int):
+    if len(stack) == 0:
+        return (0, 0)
     depth = 0
     current_sum = 0
     stack_copy = stack.copy()
-    while current_sum + stack_copy[0] <= max_sum:
+    while len(stack_copy) > 0 and current_sum + stack_copy[0] <= max_sum:
         depth += 1
         current_sum += stack_copy.pop(0)
     return (

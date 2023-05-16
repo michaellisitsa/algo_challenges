@@ -2,6 +2,21 @@ from two_stacks.two_stacks import stack_depth_not_exceeding_sum, sum_stack
 
 
 class Test_stack_depth_not_exceeding_sum:
+    def test_empty_stack_returns_zero(self):
+        depth, currentSum = stack_depth_not_exceeding_sum([], 1)
+        assert depth == 0
+        assert currentSum == 0
+
+    def test_depth_matches_stack_length(self):
+        depth, currentSum = stack_depth_not_exceeding_sum([1, 2, 3], 6)
+        assert depth == 3
+        assert currentSum == 6
+
+    def test_maxSum_greater_than_stack_sum(self):
+        depth, currentSum = stack_depth_not_exceeding_sum([1, 2, 3], 10)
+        assert depth == 3
+        assert currentSum == 6
+
     def test_list_maxSum_matches_currentSum_exactly(self):
         # At least one solution has been found
         # sqrt(100) == 10
