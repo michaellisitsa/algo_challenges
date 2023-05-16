@@ -5,7 +5,6 @@
 #  1. INTEGER maxSum
 #  2. INTEGER_ARRAY a
 #  3. INTEGER_ARRAY b
-#
 
 
 def sum_stack(stack: list[int]):
@@ -53,6 +52,11 @@ def twoStacks(maxSum: int, a: list[int], b: list[int]):
 
         # Once exhausted, get a with the bottom value popped off.
         a_copy.pop()
+
+    # Check if only pulling from b stack is the high score
+    max_depth_of_b, _ = stack_depth_not_exceeding_sum(b, maxSum)
+    max_depth = max_depth_of_b if max_depth_of_b > max_depth else max_depth
+
     return max_depth
 
 

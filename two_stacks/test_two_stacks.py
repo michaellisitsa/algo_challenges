@@ -1,4 +1,4 @@
-from two_stacks.two_stacks import stack_depth_not_exceeding_sum, sum_stack
+from two_stacks.two_stacks import stack_depth_not_exceeding_sum, sum_stack, twoStacks
 
 
 class Test_stack_depth_not_exceeding_sum:
@@ -53,3 +53,8 @@ class Test_sum_stack:
         original_stack = [1, 3]
         sum_stack(original_stack)
         assert len(original_stack) == 2
+
+
+class Test_twoStacks:
+    def test_high_score_only_taking_from_b_stack(self):
+        assert twoStacks(10, [7, 3], [8, 1, 1]) == 3
