@@ -1,7 +1,7 @@
-from two_stacks.two_stacks import stack_depth_not_exceeding_sum
+from two_stacks.two_stacks import stack_depth_not_exceeding_sum, sum_stack
 
 
-class TestTwoStacks:
+class Test_stack_depth_not_exceeding_sum:
     def test_list_maxSum_matches_currentSum_exactly(self):
         # At least one solution has been found
         # sqrt(100) == 10
@@ -24,4 +24,17 @@ class TestTwoStacks:
     def test_original_stack_length_not_modified(self):
         original_stack = [1, 3]
         stack_depth_not_exceeding_sum(original_stack, 2)
+        assert len(original_stack) == 2
+
+
+class Test_sum_stack:
+    def test_empty_stack_returns_zero(self):
+        assert sum_stack([]) == 0
+
+    def test_stack_returns_correct_value(self):
+        assert sum_stack([1, 2]) == 3
+
+    def test_original_stack_length_not_modified(self):
+        original_stack = [1, 3]
+        sum_stack(original_stack)
         assert len(original_stack) == 2
