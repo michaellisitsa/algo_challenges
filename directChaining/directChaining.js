@@ -3,12 +3,12 @@
 // Class for Direct chaining
 // Store the hash table in the class
 class DirectChaining {
-  hashTable = [];  
-  constructor (hashSize = 3) {
+  hashTable = [];
+  constructor(hashSize = 3) {
     this.hashSize = hashSize;
-    console.log("initialized class", this.hashTable) 
+    console.log("initialized class", this.hashTable)
   }
-  
+
   insertValue(value) {
     const newIndex = this.hash(value);
     console.log("index", newIndex)
@@ -25,7 +25,7 @@ class DirectChaining {
     // If index free, create array and push to the hashTable.
     return true;
   }
-  
+
   deleteValue(value) {
     const index = this.hash(value);
     const keyValues = this.hashTable[index];
@@ -39,12 +39,12 @@ class DirectChaining {
       return keyValues.splice(valueIndex, 1);
     }
   }
-  
-  hash (value) {
+
+  hash(value) {
     return value % this.hashSize;
-//    return 10;
+    //    return 10;
   }
-   
+
 }
 
 module.exports = DirectChaining;
