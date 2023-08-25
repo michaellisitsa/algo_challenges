@@ -27,6 +27,11 @@ class DirectChaining {
     return true;
   }
   
+  deleteValue(value) {
+    console.log("not implemented");
+    return;
+  }
+  
   hash (value) {
     return value % this.hashSize;
 //    return 10;
