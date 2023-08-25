@@ -5,7 +5,6 @@
 class DirectChaining {
   hashTable = [];  
   constructor (hashSize = 3) {
-//    this.hashTable = [];
     this.hashSize = hashSize;
     console.log("initialized class", this.hashTable) 
   }
@@ -28,8 +27,17 @@ class DirectChaining {
   }
   
   deleteValue(value) {
-    console.log("not implemented");
-    return;
+    const index = this.hash(value);
+    const keyValues = this.hashTable[index];
+    if (!keyValues) {
+      return;
+    }
+    const valueIndex = keyValues.indexOf(value);
+    if (valueIndex === -1) {
+      return;
+    } else {
+      return keyValues.splice(valueIndex, 1);
+    }
   }
   
   hash (value) {
