@@ -28,15 +28,19 @@ class DirectChaining {
 
   deleteValue(value) {
     const index = this.hash(value);
-    const keyValues = this.hashTable[index];
+    let keyValues = this.hashTable[index];
     if (!keyValues) {
       return;
     }
     const valueIndex = keyValues.indexOf(value);
     if (valueIndex === -1) {
       return;
+    } else if (keyValues.length === 1) {
+      const deletedItem = keyValues[0];
+      this.hashTable[index] = undefined;
+      return deletedItem;
     } else {
-      return keyValues.splice(valueIndex, 1);
+      return keyValues.splice(valueIndex, 1)[0];
     }
   }
 

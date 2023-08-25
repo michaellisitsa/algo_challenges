@@ -22,11 +22,20 @@ describe('DirectChaining', () => {
     expect(table.hashTable).toEqual([[3]]);
   });
 
-  test('delete item where key becomes empty', () => {
+  test('delete item where key still has items', () => {
     const table = new DirectChaining(3);
     table.insertValue(6);
     table.insertValue(3);
-    table.deleteValue(3);
+    expect(table.deleteValue(3)).toBe(3);    
     expect(table.hashTable).toEqual([[6]]);
+  });
+  
+  
+  test('delete item where key becomes empty', () => {
+    const table = new DirectChaining(3);
+    table.insertValue(4);
+    table.insertValue(3);
+    expect(table.deleteValue(3)).toBe(3);    
+    expect(table.hashTable).toEqual([undefined,[4]]);
   });
 });
