@@ -47,7 +47,7 @@ class DirectChaining {
   hash(value) {
     return value % this.hashSize;
     //    return 10;
-  }
+}
 
 }
 
