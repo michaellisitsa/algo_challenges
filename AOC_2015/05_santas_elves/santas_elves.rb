@@ -1,5 +1,4 @@
-require 'immutable/sorted_set'
-
+require 'set'
 VOWELS = %w[a e i o u]
 FORBIDDEN_LETTER_COMBINATIONS = {
   "a": 'b',
@@ -15,8 +14,11 @@ def add_to_queue(added_char:, queue:)
   queue << added_char
 end
 
-def validate_two_letter_strings?(two_letter_matchers:, value:)
-  two_letter_matchers.include?(value) && two_letter_matchers.last != value
+def validate_two_letter_strings?(two_letter_matchers:, queue:)
+  value = queue.find { |i| i.length == 2 }
+  test = two_letter_matchers.include?(value)
+  two_letter_matchers.add(value) if value
+  test
 end
 
 def validate_three_letter_odds_match?(queue:)
@@ -32,7 +34,7 @@ File.foreach('AOC_2015/05_santas_elves/data.txt') do |line|
 
   # Store a hash with count of repeated 2-letter combinations
   # If there is a match, clear the current combination so you don't get overlaps
-  two_letter_strings = Immutable::SortedSet.new
+  two_letter_strings = Set.new
   test_two_letter_strings = false
   test_three_letter_odds_match = false
   test_double_char = false
@@ -52,12 +54,9 @@ File.foreach('AOC_2015/05_santas_elves/data.txt') do |line|
 
     # in part 2
     new_queue = add_to_queue(added_char: char, queue: last_three_char_queue)
-    two_letter_value = new_queue.find { |i| i.length == 2 }
-    three_letter_value = new_queue.find { |i| i.length == 3 }
-    test_two_letter_strings = true if two_letter_value && validate_two_letter_strings?(two_letter_matchers: two_letter_strings,
-                                                                                       value: two_letter_value)
-    two_letter_strings = two_letter_strings.add(two_letter_value.dup) if two_letter_value
-    test_three_letter_odds_match = true if three_letter_value && validate_three_letter_odds_match?(queue: new_queue)
+    test_two_letter_strings = true if validate_two_letter_strings?(two_letter_matchers: two_letter_strings,
+                                                                   queue: new_queue)
+    test_three_letter_odds_match = true if validate_three_letter_odds_match?(queue: new_queue)
     new_queue.shift if new_queue[0].length == 3
   end
   nice_string_count += 1 if vowels >= 3 && !test_matching_string && test_double_char
