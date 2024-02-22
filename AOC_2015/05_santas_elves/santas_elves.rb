@@ -9,17 +9,10 @@ FORBIDDEN_LETTER_COMBINATIONS = {
   "x": 'y'
 }
 
-def add_to_queue(added_char:, queue:)
-  queue.map do |string|
-    string << added_char
-  end
-  queue << added_char
-end
-
-def validate_two_letter_strings?(double_pair_store:, queue:)
-  value = queue.find { |i| i.length == 2 }
-  last_value = queue.find { |i| i.length == 3 }
-  two_values_ago = queue.find { |i| i.length == 4 }
+def validate_two_letter_strings?(double_pair_store:, line:, index:)
+  value = index > 0 ? line[index - 1..index] : nil
+  last_value = index > 1 ? line[index - 2..index] : nil
+  two_values_ago = index > 2 ? line[index - 3..index] : nil
   test = double_pair_store.include?(value)
   if last_value && !two_values_ago
     # value like "aaa" needs to be excluded as a match because of the overlap.
@@ -36,8 +29,8 @@ def validate_two_letter_strings?(double_pair_store:, queue:)
   test
 end
 
-def validate_three_letter_odds_match?(queue:)
-  value = queue.find { |i| i.length == 3 }
+def validate_three_letter_odds_match?(line:, index:)
+  value = index > 1 ? line[index - 2..index] : nil
   value[0] == value[2] if value
 end
 
@@ -53,7 +46,6 @@ def perform
       test_matching_string = false
 
       # Temp variables for part 1
-
       # Store a hash with count of repeated 2-letter combinations
       # If there is a match, clear the current combination so you don't get overlaps
       vowels_counter = 0
@@ -61,12 +53,7 @@ def perform
       test_double_pair = false
       test_odds_match = false
 
-      # We don't know the next string to match so we maintain a queue of the last 4 character sequences
-      # e.g. for 'abcdef' at 'd' queue = ['abcd', 'bcd','cd','d']
-      # This is a silly way of doing this, should just use the a string and get slices of the end.
-      queue = []
-
-      line.strip.each_char do |char|
+      line.strip.each_char.with_index do |char, index|
         vowels_counter += 1 if VOWELS.include?(char)
 
         # Part 1, we know the next string we want to match
@@ -78,10 +65,9 @@ def perform
         double_next_char = char
 
         # Part 2:
-        add_to_queue(added_char: char, queue:)
         test_double_pair = true if validate_two_letter_strings?(double_pair_store:,
-                                                                queue:)
-        test_odds_match = true if validate_three_letter_odds_match?(queue:)
+                                                                line:, index:)
+        test_odds_match = true if validate_three_letter_odds_match?(line:, index:)
       end
       nice_string_count_part_one += 1 if vowels_counter >= 3 && !test_matching_string && test_double_char
       nice_string_count_part_two += 1 if test_double_pair && test_odds_match
