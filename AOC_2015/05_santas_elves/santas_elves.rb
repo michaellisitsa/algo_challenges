@@ -1,3 +1,4 @@
+# https://adventofcode.com/2015/day/5
 require 'set'
 VOWELS = %w[a e i o u]
 FORBIDDEN_LETTER_COMBINATIONS = {
@@ -41,7 +42,7 @@ end
 
 nice_string_count_part_one = 0
 nice_string_count_part_two = 0
-File.foreach('AOC_2015/05_santas_elves/data.txt') do |line|
+File.foreach('AOC_2015/05_santas_elves/test_data.txt') do |line|
   # Temp variables for part 1
   double_next_char = nil
   matching_next_char = nil
