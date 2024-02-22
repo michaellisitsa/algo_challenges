@@ -1,4 +1,5 @@
 # https://adventofcode.com/2015/day/5
+require 'benchmark'
 require 'set'
 VOWELS = %w[a e i o u]
 FORBIDDEN_LETTER_COMBINATIONS = {
@@ -40,49 +41,54 @@ def validate_three_letter_odds_match?(queue:)
   value[0] == value[2] if value
 end
 
-nice_string_count_part_one = 0
-nice_string_count_part_two = 0
-File.foreach('AOC_2015/05_santas_elves/test_data.txt') do |line|
-  # Temp variables for part 1
-  double_next_char = nil
-  matching_next_char = nil
-  test_double_char = false
-  test_matching_string = false
+def perform
+  nice_string_count_part_one = 0
+  nice_string_count_part_two = 0
+  Benchmark.measure do
+    File.foreach('AOC_2015/05_santas_elves/test_data.txt') do |line|
+      # Temp variables for part 1
+      double_next_char = nil
+      matching_next_char = nil
+      test_double_char = false
+      test_matching_string = false
 
-  # Temp variables for part 1
+      # Temp variables for part 1
 
-  # Store a hash with count of repeated 2-letter combinations
-  # If there is a match, clear the current combination so you don't get overlaps
-  vowels_counter = 0
-  double_pair_store = Set.new
-  test_double_pair = false
-  test_odds_match = false
+      # Store a hash with count of repeated 2-letter combinations
+      # If there is a match, clear the current combination so you don't get overlaps
+      vowels_counter = 0
+      double_pair_store = Set.new
+      test_double_pair = false
+      test_odds_match = false
 
-  # We don't know the next string to match so we maintain a queue of the last 4 character sequences
-  # e.g. for 'abcdef' at 'd' queue = ['abcd', 'bcd','cd','d']
-  # This is a silly way of doing this, should just use the a string and get slices of the end.
-  queue = []
+      # We don't know the next string to match so we maintain a queue of the last 4 character sequences
+      # e.g. for 'abcdef' at 'd' queue = ['abcd', 'bcd','cd','d']
+      # This is a silly way of doing this, should just use the a string and get slices of the end.
+      queue = []
 
-  line.strip.each_char do |char|
-    vowels_counter += 1 if VOWELS.include?(char)
+      line.strip.each_char do |char|
+        vowels_counter += 1 if VOWELS.include?(char)
 
-    # Part 1, we know the next string we want to match
-    # so we have it ready to compare against
-    test_matching_string = true if matching_next_char == char
-    matching_next_char = FORBIDDEN_LETTER_COMBINATIONS[char.to_sym]
+        # Part 1, we know the next string we want to match
+        # so we have it ready to compare against
+        test_matching_string = true if matching_next_char == char
+        matching_next_char = FORBIDDEN_LETTER_COMBINATIONS[char.to_sym]
 
-    test_double_char = true if double_next_char == char
-    double_next_char = char
+        test_double_char = true if double_next_char == char
+        double_next_char = char
 
-    # Part 2:
-    add_to_queue(added_char: char, queue:)
-    test_double_pair = true if validate_two_letter_strings?(double_pair_store:,
-                                                            queue:)
-    test_odds_match = true if validate_three_letter_odds_match?(queue:)
+        # Part 2:
+        add_to_queue(added_char: char, queue:)
+        test_double_pair = true if validate_two_letter_strings?(double_pair_store:,
+                                                                queue:)
+        test_odds_match = true if validate_three_letter_odds_match?(queue:)
+      end
+      nice_string_count_part_one += 1 if vowels_counter >= 3 && !test_matching_string && test_double_char
+      nice_string_count_part_two += 1 if test_double_pair && test_odds_match
+    end
+    puts "Part 1 ##{nice_string_count_part_one}"
+    puts "Part 2 ##{nice_string_count_part_two}"
   end
-  nice_string_count_part_one += 1 if vowels_counter >= 3 && !test_matching_string && test_double_char
-  nice_string_count_part_two += 1 if test_double_pair && test_odds_match
 end
-
-puts "Part 1 ##{nice_string_count_part_one}"
-puts "Part 2 ##{nice_string_count_part_two}"
+result = perform
+puts result
