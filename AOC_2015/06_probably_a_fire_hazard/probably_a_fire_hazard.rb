@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 # My documentation
-module ProbablyAFireHazard
-  def self.start
+class ProbablyAFireHazard
+  def start
     'hello'
   end
 
-  def self.end
+  def end
     'bye'
   end
 end
