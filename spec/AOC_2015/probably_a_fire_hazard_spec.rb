@@ -2,10 +2,28 @@ require_relative '../../AOC_2015/06_probably_a_fire_hazard/probably_a_fire_hazar
 require 'rspec'
 
 describe 'ProbablyAFireHazard' do
-  context 'Greet' do
-    it 'says hello' do
-      greeting = ProbablyAFireHazard.new
-      expect(greeting.start).to eq('hello')
+  context 'initialize()' do
+    it 'initializes array with provided height' do
+      greeting = ProbablyAFireHazard.new(3)
+      expect(greeting.array).to eq([[], [], []])
+    end
+  end
+
+  context 'parse()' do
+    it 'interprets on and off instructions' do
+      parsed = ProbablyAFireHazard.parse(string: 'turn on 0,0 through 999,999')
+      expect(parsed.to_h).to include(
+        operation: 'turn on',
+        start_coords: [0, 0],
+        end_coords: [999, 999]
+      )
+      # expect(parsed.to_h).to eq(['turn on', [0, 0], [999, 999]])
+    end
+    it 'interprets on and off instructions' do
+      parsed = ProbablyAFireHazard.parse(string: 'turn off 0,0 through 999,999')
+      expect(parsed.to_h).to include(
+        operation: 'turn off'
+      )
     end
   end
 end
