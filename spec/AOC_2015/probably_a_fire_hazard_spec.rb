@@ -11,7 +11,7 @@ describe 'ProbablyAFireHazard' do
 
   context 'parse()' do
     it 'interprets on and off instructions' do
-      parsed = ProbablyAFireHazard.parse(string: 'turn on 0,0 through 999,999')
+      parsed = ProbablyAFireHazard.parse 'turn on 0,0 through 999,999'
       expect(parsed.to_h).to include(
         operation: 'turn on',
         start_coords: [0, 0],
@@ -20,10 +20,15 @@ describe 'ProbablyAFireHazard' do
       # expect(parsed.to_h).to eq(['turn on', [0, 0], [999, 999]])
     end
     it 'interprets on and off instructions' do
-      parsed = ProbablyAFireHazard.parse(string: 'turn off 0,0 through 999,999')
+      parsed = ProbablyAFireHazard.parse 'turn off 0,0 through 999,999'
       expect(parsed.to_h).to include(
         operation: 'turn off'
       )
     end
+    it 'returns nothing for invalid instructions' do
+      parsed = ProbablyAFireHazard.parse 'something else 0,0 through 999,999'
+      expect(parsed).to be(nil)
+    end
+  end
   end
 end
