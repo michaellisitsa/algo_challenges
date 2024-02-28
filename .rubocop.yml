@@ -1,2 +1,17 @@
 Metrics/BlockLength:
   AllowedMethods: ["describe", "context"]
+
+Metrics/MethodLength:
+  Max: 30
+  CountComments: false
+  ExcludedMethods: ["describe", "context"]
+
+Metrics/CyclomaticComplexity:
+  Max: 30
+  CountComments: false
+  ExcludedMethods: ["describe", "context"]
+
+Metrics/AbcSize:
+  Max: 30
+  CountComments: false
+  ExcludedMethods: ["describe", "context"]
