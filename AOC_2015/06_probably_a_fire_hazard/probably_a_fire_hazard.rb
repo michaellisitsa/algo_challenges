@@ -10,12 +10,10 @@ Instruction = Struct.new(:operation, :start_coords, :end_coords, keyword_init: t
   end
 end
 
-# My documentation
 class ProbablyAFireHazard
   attr_accessor :array
 
   def initialize(height:, width:)
-    # Use an sorted set so we only track the flipped switches rather than the whole row
     @array = Array.new(height) { Array.new(width) }
   end
 
@@ -36,10 +34,6 @@ class ProbablyAFireHazard
     instruction = self.class.parse(string)
     case instruction.operation
     when 'turn on'
-      # For every row in the range instruction.y_range:
-      # Set the begin as "on"
-      # Set the end as "off"
-      # Clear all values in between "on" and "off"
       instruction.y_range.each do |row_idx|
         @array[row_idx].fill(1, instruction.x_range)
       end
