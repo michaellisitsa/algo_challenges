@@ -30,5 +30,37 @@ describe 'ProbablyAFireHazard' do
       expect(parsed).to be(nil)
     end
   end
+
+  context 'handle()' do
+    it 'it turns first row on' do
+      fire_hazard = ProbablyAFireHazard.new(height: 3, width: 3)
+      fire_hazard.handle 'turn on 0,0 through 2,0'
+      expect(fire_hazard.array[0]).to eq(
+        [1, 1, 1]
+      )
+      expect(fire_hazard.count_lights).to eq(3)
+    end
+
+    it 'it executes 2 commands on same row' do
+      fire_hazard = ProbablyAFireHazard.new(height: 3, width: 3)
+      fire_hazard.handle 'turn on 0,0 through 2,0'
+      fire_hazard.handle 'turn off 1,0 through 1,0'
+      expect(fire_hazard.array[0]).to eq(
+        [1, nil, 1]
+      )
+      expect(fire_hazard.count_lights).to eq(2)
+    end
+
+    it 'it executes 2 commands on multiple rows row' do
+      fire_hazard = ProbablyAFireHazard.new(height: 3, width: 3)
+      fire_hazard.handle 'turn on 0,0 through 2,2'
+      fire_hazard.handle 'turn off 1,0 through 1,1'
+      expect(fire_hazard.array).to eq([
+                                        [1, nil, 1],
+                                        [1, nil, 1],
+                                        [1, 1, 1]
+                                      ])
+      expect(fire_hazard.count_lights).to eq(7)
+    end
   end
 end
