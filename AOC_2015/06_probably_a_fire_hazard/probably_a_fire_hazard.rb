@@ -15,8 +15,11 @@ end
 class ProbablyAFireHazard
   attr_accessor :array
 
-  def initialize(height)
-    @array = Array.new(height) { Array.new(0) }
+  def initialize(height:, width:)
+    # Use an sorted set so we only track the flipped switches rather than the whole row
+    @array = Array.new(height) { Array.new(width) }
+  end
+
   end
 
   def self.parse(string)

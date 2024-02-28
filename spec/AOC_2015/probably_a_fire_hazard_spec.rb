@@ -4,8 +4,8 @@ require 'rspec'
 describe 'ProbablyAFireHazard' do
   context 'initialize()' do
     it 'initializes array with provided height' do
-      greeting = ProbablyAFireHazard.new(3)
-      expect(greeting.array).to eq([[], [], []])
+      greeting = ProbablyAFireHazard.new(height: 3, width: 2)
+      expect(greeting.array).to eq([Array.new(2), Array.new(2), Array.new(2)])
     end
   end
 
