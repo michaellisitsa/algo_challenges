@@ -6,11 +6,11 @@ char pop(string& myString)
     // Checking if the string is not empty before removing the last character
     if (!myString.empty())
     {
-        char lastValue = myString.back();
-        cout << myString << endl;
-        myString.pop_back();
-        cout << myString << endl;
-        return lastValue;
+        char deletedValue = myString[0];
+        // cout << myString << endl;
+        myString.erase(0, 1);
+        // cout << myString << endl;
+        return deletedValue;
     }
     return '0';
 }
@@ -26,7 +26,7 @@ string next_look_and_say(int input)
     // 2. Loop through the string
     while (!inputString.empty())
     {
-        pop(inputString);
+        char deletedValue = pop(inputString);
     }
     return to_string(input);
 }
