@@ -1,38 +1,56 @@
 #include <iostream>
+#include <format>
+
 using namespace std;
 
-char pop(string& myString)
-{
-    // Checking if the string is not empty before removing the last character
-    if (!myString.empty())
-    {
-        char deletedValue = myString[0];
-        // cout << myString << endl;
-        myString.erase(0, 1);
-        // cout << myString << endl;
-        return deletedValue;
-    }
-    return '0';
-}
-
-// Declaring array to a function call
-// https://www.digitalocean.com/community/tutorials/return-array-in-c-plus-plus-function
-// Instead return a string
 string next_look_and_say(int input)
 {
-    cout << "I just got executed!" << endl;
-    // 1. Convert the input to a string
     string inputString = to_string(input);
-    // 2. Loop through the string
+    string result = "";
+
+    // Process the first element from the input
+    int count = 1;
+    char previousChar = inputString[0];
+    inputString.erase(0, 1);
+
     while (!inputString.empty())
     {
-        char deletedValue = pop(inputString);
+        char currentChar = inputString[0];
+        if (inputString.length() == 1)
+        {
+            if (currentChar != previousChar)
+            {
+                // if its different and then we need to return
+                // both the previous result and the the orphaned one.
+                result.append(format("{}{}", count, previousChar));
+                result.append(format("{}{}", 1, currentChar));
+            }
+            else
+            {
+                // if its the same as the previous one, then we need to increment the count
+                count += 1;
+                result.append(format("{}{}", count, previousChar));
+            }
+        }
+        else if (currentChar != previousChar)
+        {
+            cout << previousChar << endl;
+            result.append(format("{}{}", count, previousChar));
+            count = 1;                  // start counter again
+            previousChar = currentChar; // Reset the previous character
+        }
+        else
+        {
+            count += 1;
+            cout << inputString << endl;
+        }
+        inputString.erase(0, 1);
     }
-    return to_string(input);
+    return result;
 }
 
 int main()
 {
-    cout << next_look_and_say(12) << endl; // call the function
+    cout << next_look_and_say(115554442) << endl; // call the function
     return 0;
 }
