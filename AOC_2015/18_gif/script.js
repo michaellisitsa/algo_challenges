@@ -35,9 +35,10 @@ function draw(data) {
 }
 
 async function main() {
-  const data = await getData();
+  let data = await getData();
+  data = data.trim().replace(/\r?\n|\r/g, "");
   draw(data);
-  getNeighbourCount(0, data);
+  getNeighbourCount(0, Array.from(data));
 }
 
 main();
