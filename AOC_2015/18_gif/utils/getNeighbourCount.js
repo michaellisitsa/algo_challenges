@@ -1,3 +1,7 @@
+function matrixToFlatIndex(width) {
+  return (row, col) => row * width + col;
+}
+
 export default function getNeighbourCount(currentIndex, data) {
   // We want to get the current position and check the up to 8 surrounding positions
   /*
@@ -10,14 +14,35 @@ export default function getNeighbourCount(currentIndex, data) {
   if (!Number.isInteger(width)) {
     throw new Error("Data is not square");
   }
+  const getIdx = matrixToFlatIndex(width);
 
-  const currentRow = Math.floor(currentIndex / width);
-  const currentColumn = currentIndex % width;
+  const row = Math.floor(currentIndex / width);
+  const col = currentIndex % width;
 
-  if (currentColumn === 0 && currentRow === 0) {
-    // Top left corner
-    return data[1] + data[width] + data[width + 1];
-  } else {
-    return 0;
+  if (row === 0) {
+    if (col == 0) {
+      // Top left corner
+      return (
+        data[getIdx(row, col + 1)] +
+        data[getIdx(row + 1, col)] +
+        data[getIdx(row + 1, col + 1)]
+      );
+    } else if (col == width - 1) {
+      // Top right corner
+      return (
+        data[getIdx(row, col - 1)] +
+        data[getIdx(row + 1, col - 1)] +
+        data[getIdx(row + 1, col)]
+      );
+    } else {
+      // Top row
+      return (
+        data[getIdx(row, col - 1)] +
+        data[getIdx(row, col + 1)] +
+        data[getIdx(row + 1, col - 1)] +
+        data[getIdx(row + 1, col)] +
+        data[getIdx(row + 1, col + 1)]
+      );
+    }
   }
 }
