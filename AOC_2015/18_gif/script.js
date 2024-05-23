@@ -23,7 +23,7 @@ function draw(data) {
 
       // Each pixel is represented by 4 values (RGBA)
       const pixelIndex = index * 4;
-      const color = value == "#" ? 255 : 0; // White for 1, black for 0
+      const color = value == 1 ? 255 : 0; // White for 1, black for 0
 
       imageData.data[pixelIndex] = color; // Red
       imageData.data[pixelIndex + 1] = color; // Green
@@ -36,9 +36,41 @@ function draw(data) {
 
 async function main() {
   let data = await getData();
-  data = data.trim().replace(/\r?\n|\r/g, "");
+  data = Array.from(
+    data
+      .trim()
+      .replace(/\r?\n|\r/g, "")
+      .replaceAll("#", "1")
+      .replaceAll(".", "0")
+  ).map(Number);
   draw(data);
-  getNeighbourCount(0, Array.from(data));
+
+  let x = 0;
+  let nextMap = Array(10000).fill(0);
+  let previousMap = data;
+  let intervalID = setInterval(function () {
+    nextMap = Array(10000)
+      .fill()
+      .map((_, i) => {
+        const neighbourCount = getNeighbourCount(i, previousMap);
+        if (
+          (neighbourCount === 2 || neighbourCount == 3) &&
+          previousMap[i] == 1
+        ) {
+          return 1;
+        } else if (neighbourCount === 3 && previousMap[i] == 0) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    console.log("nextMap", nextMap);
+    draw(nextMap);
+    previousMap = nextMap;
+    if (++x === 100) {
+      window.clearInterval(intervalID);
+    }
+  }, 200);
 }
 
 main();
