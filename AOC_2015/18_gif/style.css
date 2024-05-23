@@ -1,3 +1,4 @@
 canvas {
-    transform: scale(5);
+    transform: scale(16);
+    image-rendering: pixelated;
 }
