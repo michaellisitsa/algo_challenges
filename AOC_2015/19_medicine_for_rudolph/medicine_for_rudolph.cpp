@@ -3,8 +3,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <set>
 // Import necessary for maps.
 #include <map> // Add this line to include the <map> header file
+
+const std::string INPUT = "CRnCaSiRnBSiRnFArTiBPTiTiBFArPBCaSiThSiRnTiBPBPMgArCaSiRnTiMgArCaSiThCaSiRnFArRnSiRnFArTiTiBFArCaCaSiRnSiThCaCaSiRnMgArFYSiRnFYCaFArSiThCaSiThPBPTiMgArCaPRnSiAlArPBCaCaSiRnFYSiThCaRnFArArCaCaSiRnPBSiRnFArMgYCaCaCaCaSiThCaCaSiAlArCaCaSiRnPBSiAlArBCaCaCaCaSiThCaPBSiThPBPBCaSiRnFYFArSiThCaSiRnFArBCaCaSiRnFYFArSiThCaPBSiThCaSiRnPMgArRnFArPTiBCaPRnFArCaCaCaCaSiRnCaCaSiRnFYFArFArBCaSiThFArThSiThSiRnTiRnPMgArFArCaSiThCaPBCaSiRnBFArCaCaPRnCaCaPMgArSiRnFYFArCaSiThRnPBPMgAr";
 
 void readFileIntoMap(std::map<std::string, std::vector<std::string>> &map)
 {
@@ -52,33 +55,58 @@ void readFileIntoMap(std::map<std::string, std::vector<std::string>> &map)
     }
 }
 
+// replacementMap is passed by reference to avoid copying
+// Pass the input by const reference, because INPUT is a const
+std::set<std::string> generateMolecules(std::map<std::string, std::vector<std::string>> &replacementsMap, const std::string &input)
+{
+    std::set<std::string> distinctMolecules;
+    int currentPos = 0;
+    while (currentPos < input.size())
+    {
+        std::string currentChar = input.substr(currentPos, 1);
+        std::string twoCharMatcher = input.substr(currentPos, 2);
+        if (replacementsMap.find(currentChar) != replacementsMap.end())
+        {
+            for (const auto &value : replacementsMap[currentChar])
+            {
+                std::string newString = input;
+                newString.replace(currentPos, 1, value);
+                distinctMolecules.insert(newString);
+            }
+        }
+        else if (replacementsMap.find(twoCharMatcher) != replacementsMap.end())
+        {
+            for (const auto &value : replacementsMap[twoCharMatcher])
+            {
+                std::string newString = input;
+                newString.replace(currentPos, 2, value);
+                distinctMolecules.insert(newString);
+            }
+            // An extra shift right is needed because we are looking at two characters
+            currentPos++;
+        }
+        currentPos++;
+    }
+    std::cout << "Distinct molecules: " << distinctMolecules.size() << std::endl;
+    // This is making a brand new copy in the top scope.
+    // For more memory efficiency we could possibly use other techniques
+    // like passing a reference to the set and modifying it in place.
+    return distinctMolecules;
+}
+
 int main()
 {
-    std::map<std::string, std::vector<std::string>> map;
-    readFileIntoMap(map);
-    // We are getting a reference to every key-value pair in the map
-    // and marking it const so that we can't modify it
-    for (const auto &pair : map)
-    {
-        std::cout << pair.first << " => ";
-        // We are getting a reference to each item in the vector
-        // and marking it const so that we can't modify it
-        for (const auto &value : pair.second)
-        {
-            std::cout << value << ", ";
-        }
-        std::cout << std::endl;
-    }
+    std::map<std::string, std::vector<std::string>> replacementsMap;
+    // Since readFileIntoMap takes a reference, we can pass the map directly
+    // and it is modified in place.
+    readFileIntoMap(replacementsMap);
+    std::set<std::string> part1 = generateMolecules(replacementsMap, INPUT);
     return 0;
 }
-// Parse the keys to objects mapping
-// and store it in a map
 
-// while the remainingChars is not empty
-//    If the next character is a one-character matcher
-//        copy the string and replace the character
-//    elseif the next character is a two-character matcher
-//        copy the string and replace the two characters
-//    else
-//        pop the currentChar from the remainingChars
-//    push the string onto a Set
+// Starting from a single molecule e
+// we need to try all the possible replacements on it.
+// For each distinct molecule
+//    we need to try all the possible replacements on it.
+//    Delete the original distinct molecule
+// Accumulate all the local distinct molecules into a set of global distinct molecules
