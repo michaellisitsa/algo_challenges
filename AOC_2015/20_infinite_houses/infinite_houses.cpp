@@ -1,18 +1,18 @@
 #include <iostream>
 #include <vector>
+#include <set>
 
 namespace infinite_houses
 {
-    int get_presents(int number)
+    bool is_prime(int number)
     {
-        // Create a list of prime numbers and their current factor's cumulative total
-        // while we haven't found house with 29000000 presents
-        std::vector<int> primes;
-        // Special case number 1 to 2
-        // If odd number
+        if (number < 4)
+        {
+            return true;
+        }
         if (number % 2 != 0)
         {
-            //    Check if number is prime
+            std::cout << "Checking if " << number << " is prime." << std::endl;
             bool isPrime = true;
             for (int i = 3; i <= number / 2; i += 2)
             {
@@ -23,11 +23,25 @@ namespace infinite_houses
                     break;
                 }
             }
+            std::cout << number << " is prime: " << isPrime << std::endl;
+            return isPrime;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-            if (isPrime)
-            {
-                primes.push_back(number);
-            }
+    int get_presents(int number)
+    {
+        // Create a list of prime numbers and their current factor's cumulative total
+        // while we haven't found house with 29000000 presents
+        std::vector<int> primes;
+
+        bool isPrime = is_prime(number);
+        if (isPrime)
+        {
+            primes.push_back(number);
         }
 
         // Print contents of primes vector
@@ -35,16 +49,12 @@ namespace infinite_houses
         {
             std::cout << prime << " ";
         }
-        //    If prime
-        //        Add to prime map
-        //        Initialize total with number
         return 0;
     }
 
 }
-
 int main()
 {
-    std::cout << infinite_houses::get_presents(4) << std::endl;
+    std::cout << infinite_houses::get_presents(3) << std::endl;
     return 0;
 }
