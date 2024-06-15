@@ -31,7 +31,7 @@ namespace infinite_houses
         }
     }
 
-    std::pair<int, int> get_presents(int number, std::vector<int> primes)
+    std::pair<int, int> get_presents(int number, const std::vector<int> &primes)
     {
         std::set<int> visited_elves_gt_50_multiple;
         std::set<int> visited_elves_lte_50_multiple;
@@ -79,8 +79,7 @@ namespace infinite_houses
 int main()
 {
     std::vector<int> primes;
-    unsigned long long number = 29000000;
-    ;
+    int number = 29000000;
     std::cout << "Started calculating primes" << std::endl;
     for (int i = 2; i <= number / 2; i++)
     {
@@ -96,16 +95,23 @@ int main()
     std::cout << "Finished calculating primes" << std::endl;
 
     // Modify trial value to get reasonable time to completion
-    for (unsigned long long trial = 1; trial < number; trial++)
+    int guess = 2;
+    bool currentIsEven = guess % 2 == 0;
+    for (int trial = guess; trial < number; trial++)
     {
         bool firstSolved = false;
         bool secondSolved = false;
-
-        std::pair<int, int> presents = infinite_houses::get_presents(trial, primes);
-        if (trial % 100 == 0)
+        if (!currentIsEven)
         {
-            std::cout << "Num: " << trial << " Presents Pt1: " << presents.first << " Pt2: " << presents.second << std::endl;
+            currentIsEven = true;
+            continue;
         }
+        else
+        {
+            currentIsEven = false;
+        }
+        std::pair<int, int> presents = infinite_houses::get_presents(trial, primes);
+
         if (presents.first >= number && !firstSolved)
         {
             std::cout << "RESULTS PART 1: " << std::endl;
