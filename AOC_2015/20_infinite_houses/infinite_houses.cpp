@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <algorithm>
+#include <utility>
 
 namespace infinite_houses
 {
@@ -29,12 +31,13 @@ namespace infinite_houses
         }
     }
 
-    int get_presents(int number, std::vector<int> primes)
+    std::pair<int, int> get_presents(int number, std::vector<int> primes)
     {
-        std::set<int> visited_elves;
+        std::set<int> visited_elves_gt_50_multiple;
+        std::set<int> visited_elves_lte_50_multiple;
         // Special case for end elves
-        visited_elves.insert(1);
-        visited_elves.insert(number);
+        visited_elves_gt_50_multiple.insert(1); // we know the 1st elf will be way over the 50th multiple
+        visited_elves_lte_50_multiple.insert(number);
         for (int prime : primes)
         {
             if (prime > number / 2)
@@ -47,16 +50,28 @@ namespace infinite_houses
                 {
                     if (number % multiple == 0)
                     {
-                        visited_elves.insert(multiple);
+                        if (number / multiple <= 50)
+                        {
+                            visited_elves_lte_50_multiple.insert(multiple);
+                        }
+                        else
+                        {
+                            visited_elves_gt_50_multiple.insert(multiple);
+                        }
                     }
                 }
             }
         }
 
-        int sum = 0;
-        for (int elf : visited_elves)
+        std::pair<int, int> sum = std::make_pair(0, 0);
+        for (int elf : visited_elves_gt_50_multiple)
         {
-            sum += 10 * elf;
+            sum.first += 10 * elf;
+        }
+        for (int elf : visited_elves_lte_50_multiple)
+        {
+            sum.first += 10 * elf;
+            sum.second += 11 * elf;
         }
         return sum;
     }
@@ -83,15 +98,30 @@ int main()
     // Modify trial value to get reasonable time to completion
     for (unsigned long long trial = 1; trial < number; trial++)
     {
-        if (trial % 50 == 0)
+        bool firstSolved = false;
+        bool secondSolved = false;
+
+        std::pair<int, int> presents = infinite_houses::get_presents(trial, primes);
+        if (trial % 100 == 0)
         {
-            std::cout << "Calculating presents for: " << trial << std::endl;
+            std::cout << "Num: " << trial << " Presents Pt1: " << presents.first << " Pt2: " << presents.second << std::endl;
         }
-        if (infinite_houses::get_presents(trial, primes) >= number)
+        if (presents.first >= number && !firstSolved)
         {
-            std::cout << "RESULTS: " << std::endl;
-            std::cout << "House Number: " << trial << ", Presents: " << infinite_houses::get_presents(trial, primes) << std::endl;
+            std::cout << "RESULTS PART 1: " << std::endl;
+            std::cout << "House Number: " << trial << ", Presents: " << presents.first << std::endl;
             std::cout << trial << std::endl;
+            firstSolved = true;
+        }
+        if (presents.second >= number)
+        {
+            std::cout << "RESULTS PART 2: " << std::endl;
+            std::cout << "House Number: " << trial << ", Presents: " << presents.second << std::endl;
+            std::cout << trial << std::endl;
+            secondSolved = true;
+        }
+        if (firstSolved && secondSolved)
+        {
             break;
         }
     }
