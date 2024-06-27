@@ -7,11 +7,38 @@
 const int INITIAL_PLAYER_HEALTH = 8;
 const int INITIAL_ENEMY_HEALTH = 12;
 
+#include <unordered_map>
+
+const std::unordered_map<std::string, std::unordered_map<std::string, int>> WEAPONS = {
+    {"Dagger", {{"Cost", 8}, {"Damage", 4}, {"Armor", 0}}},
+    {"Shortsword", {{"Cost", 10}, {"Damage", 5}, {"Armor", 0}}},
+    {"Warhammer", {{"Cost", 25}, {"Damage", 6}, {"Armor", 0}}},
+    {"Longsword", {{"Cost", 40}, {"Damage", 7}, {"Armor", 0}}},
+    {"Greataxe", {{"Cost", 74}, {"Damage", 8}, {"Armor", 0}}}};
+
+const std::unordered_map<std::string, std::unordered_map<std::string, int>> ARMOR = {
+    {"None", {{"Cost", 0}, {"Damage", 0}, {"Armor", 0}}},
+    {"Leather", {{"Cost", 13}, {"Damage", 0}, {"Armor", 1}}},
+    {"Chainmail", {{"Cost", 31}, {"Damage", 0}, {"Armor", 2}}},
+    {"Splintmail", {{"Cost", 53}, {"Damage", 0}, {"Armor", 3}}},
+    {"Bandedmail", {{"Cost", 75}, {"Damage", 0}, {"Armor", 4}}},
+    {"Platemail", {{"Cost", 102}, {"Damage", 0}, {"Armor", 5}}}};
+
+const std::unordered_map<std::string, std::unordered_map<std::string, int>> RINGS = {
+    {"Damage +1", {{"Cost", 25}, {"Damage", 1}, {"Armor", 0}}},
+    {"Damage +2", {{"Cost", 50}, {"Damage", 2}, {"Armor", 0}}},
+    {"Damage +3", {{"Cost", 100}, {"Damage", 3}, {"Armor", 0}}},
+    {"Defense +1", {{"Cost", 20}, {"Damage", 0}, {"Armor", 1}}},
+    {"Defense +2", {{"Cost", 40}, {"Damage", 0}, {"Armor", 2}}},
+    {"Defense +3", {{"Cost", 80}, {"Damage", 0}, {"Armor", 3}}}};
+
 // https://www.learncpp.com/cpp-tutorial/constructors-and-initialization-of-derived-classes/
 class ShopItem
 {
+private:
+    const std::string m_name;
+
 public:
-    std::string m_name;
     int m_cost;
 
     ShopItem(std::string name, int cost) : m_name(name), m_cost(cost){};
@@ -29,6 +56,12 @@ public:
     {
         return m_cost / m_damage;
     }
+
+    void enhance(int cost, int damage)
+    {
+        m_cost += cost;
+        m_damage += damage;
+    }
 };
 
 class Armor : public ShopItem
@@ -43,31 +76,33 @@ public:
     {
         return m_cost / m_armor;
     }
+
+    void enhance(int cost, int armor)
+    {
+        m_cost += cost;
+        m_armor += armor;
+    }
 };
 
 class Player
 {
 private:
-    Weapon m_weapon = Weapon("unset", 0, 0);
-    Armor m_armor = Armor("unset", 0, 0);
+    Weapon m_weapon = Weapon("Combined", 0, 0);
+    Armor m_armor = Armor("Combined", 0, 0);
 
 public:
     int m_health;
 
     Player(int initialHealth) : m_health(initialHealth){};
 
-    void equip(Weapon weapon)
+    void equip(const Weapon &weapon)
     {
-        // TODO: This would make a copy of the weapon class every time
-        // Should the player just store a pointer, or just mutate the weapon's properties every time?
-        // But if you store a pointer then the weapon will go out of scope and the player's
-        // pointer no longer points to something.
-        m_weapon = weapon;
+        m_weapon.enhance(weapon.m_cost, weapon.m_damage);
     }
 
-    void equip(Armor armor)
+    void equip(const Armor &armor)
     {
-        m_armor = armor;
+        m_armor.enhance(armor.m_cost, armor.m_armor);
     }
 
     bool isAlive()
@@ -106,6 +141,8 @@ public:
 class Battle
 {
 private:
+    // TODO: We're copying the player and enemy classes here. Should we just store pointers?
+    // But then the player and enemy classes will go out of scope and the battle class will have pointers to nothing.
     Player m_player;
     Player m_enemy;
 
@@ -127,12 +164,29 @@ public:
         // Should never be hit.
         return true;
     };
+
+    int getPlayerSpend()
+    {
+        return m_player.getCost();
+    }
 };
 
 int main()
 {
+    for (const auto &weapon : WEAPONS)
+    {
+        std::cout << weapon.first << ": " << std::endl;
+        for (const auto &attribute : weapon.second)
+        {
+            std::cout << "  " << attribute.first << ": " << attribute.second << std::endl;
+        }
+        std::cout << std::endl;
+    }
+
     Weapon weapon = Weapon{"Dagger", 8, 5};
     Armor armor = Armor{"Leather", 13, 5};
+    Weapon ring = Weapon{"Damage +1", 25, 1};
+    Armor ring_armor = Armor{"Defense +1", 20, 1};
     Player player = Player{INITIAL_PLAYER_HEALTH};
     player.equip(weapon);
     player.equip(armor);
@@ -147,6 +201,7 @@ int main()
     if (battle.fight())
     {
         std::cout << "Player wins!" << std::endl;
+        std::cout << "Player spent $" << battle.getPlayerSpend() << std::endl;
     }
     else
     {
