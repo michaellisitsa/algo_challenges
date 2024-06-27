@@ -96,6 +96,11 @@ public:
     {
         return m_weapon.m_damage;
     }
+
+    int getCost()
+    {
+        return m_weapon.m_cost + m_armor.m_cost;
+    }
 };
 
 class Battle
@@ -107,34 +112,20 @@ private:
 public:
     Battle(Player player, Player enemy) : m_player(player), m_enemy(enemy){};
 
-    void fight()
+    bool fight()
     {
         while (m_player.isAlive() && m_enemy.isAlive())
         {
-            if (m_enemy.takeDamage(m_player.giveDamage()))
-            {
-                std::cout << "Enemy health: " << m_enemy.m_health << std::endl;
-            }
-            else
-            {
-                std::cout << "Enemy died" << std::endl;
-                break;
-            };
+            if (!m_enemy.takeDamage(m_player.giveDamage()))
+                return true;
 
-            if (m_player.takeDamage(m_enemy.giveDamage()))
-            {
-                std::cout << "Player health: " << m_player.m_health << std::endl;
-            }
-            else
-            {
-                std::cout << "Player died" << std::endl;
-                break;
-            };
+            if (!m_player.takeDamage(m_enemy.giveDamage()))
+                return false;
+
+            std::cout << "Player: " << m_player.m_health << " Enemy: " << m_enemy.m_health << std::endl;
         }
-
-        m_enemy.takeDamage(m_player.giveDamage());
-        std::cout << "Player health: " << m_player.m_health << std::endl;
-        std::cout << "Enemy health: " << m_enemy.m_health << std::endl;
+        // Should never be hit.
+        return true;
     };
 };
 
@@ -153,7 +144,14 @@ int main()
     enemy.equip(enemy_armor);
 
     Battle battle = Battle{player, enemy};
-    battle.fight();
+    if (battle.fight())
+    {
+        std::cout << "Player wins!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Enemy wins!" << std::endl;
+    };
 
     // TODO:
     // We have to reduce the gradient that you die at and increase the gradient that your partner dies at.
