@@ -4,7 +4,7 @@
 - [x] Two Stacks Challenge HackerRank - https://www.hackerrank.com/challenges/game-of-two-stacks/
 - [x] Encryption - https://www.hackerrank.com/challenges/encryption/
 - [x] Insertion Sort HackerRank - https://www.hackerrank.com/challenges/insertionsort1
-
+- [x] Bird Sightings - https://www.hackerrank.com/challenges/migratory-birds/
 ## Set up
 
 - `npm install`
