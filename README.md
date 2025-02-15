@@ -5,6 +5,9 @@
 - [x] Encryption - https://www.hackerrank.com/challenges/encryption/
 - [x] Insertion Sort HackerRank - https://www.hackerrank.com/challenges/insertionsort1
 - [x] Bird Sightings - https://www.hackerrank.com/challenges/migratory-birds/
+- [x] Reduce String - https://www.hackerrank.com/challenges/reduced-string 
+
+
 ## Set up
 
 - `npm install`
