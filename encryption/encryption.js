@@ -1,5 +1,4 @@
 function encryption(s) {
-  // Write your code here
   const str = s.replaceAll(" ", "");
   const sqrt = Math.sqrt(str.length);
   const cols = Math.ceil(sqrt);

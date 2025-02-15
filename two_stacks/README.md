@@ -1,5 +1,7 @@
 # Two Stacks Challenge
 ## Description
+Solved Date: 17 May 2023
+
 https://www.hackerrank.com/challenges/game-of-two-stacks/
 Alexa has two stacks of non-negative integers, stack a[n] and stack b[m] where index 0 denotes the top of the stack. Alexa challenges Nick to play the following game:
 
