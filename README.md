@@ -1,8 +1,9 @@
 # Algorithm Challenges
 
-[x] Balanced Brackets
-[8/15] Two Stacks Challenge HackerRank https://www.hackerrank.com/challenges/game-of-two-stacks/
-
+- [x] Balanced Brackets
+- [x] Two Stacks Challenge HackerRank - https://www.hackerrank.com/challenges/game-of-two-stacks/
+- [x] Encryption - https://www.hackerrank.com/challenges/encryption/
+- [x] Insertion Sort HackerRank - https://www.hackerrank.com/challenges/insertionsort1
 
 ## Set up
 
