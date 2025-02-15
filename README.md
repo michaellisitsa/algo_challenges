@@ -1,6 +1,8 @@
 # Algorithm Challenges
 
 [x] Balanced Brackets
+[8/15] Two Stacks Challenge HackerRank https://www.hackerrank.com/challenges/game-of-two-stacks/
+
 
 ## Set up
 
