@@ -6,6 +6,7 @@
  */
 
 function breakingRecords(scores) {
+    
   let max = 0;
   let min = 0;
   scores.reduce((accum, current, currentIndex) => {

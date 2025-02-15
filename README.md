@@ -8,6 +8,7 @@
 - [x] Bird Sightings - https://www.hackerrank.com/challenges/migratory-birds/
 - [x] Reduce String - https://www.hackerrank.com/challenges/reduced-string 
 - [x] Almost Sorted - https://www.hackerrank.com/challenges/almost-sorted/
+- [x] Breaking Best and Worst Record - https://www.hackerrank.com/challenges/breaking-best-and-worst-records
 
 ## 2023
 
