@@ -6,6 +6,7 @@
 - [x] Encryption - https://www.hackerrank.com/challenges/encryption/
 - [x] Insertion Sort - https://www.hackerrank.com/challenges/insertionsort1
 - [x] Super Digit - https://www.hackerrank.com/challenges/recursive-digit-sum
+- [x] Sherlock Valid String - https://www.hackerrank.com/challenges/sherlock-and-valid-string
 - [x] Bird Sightings - https://www.hackerrank.com/challenges/migratory-birds/
 - [x] Reduce String - https://www.hackerrank.com/challenges/reduced-string 
 - [x] Almost Sorted - https://www.hackerrank.com/challenges/almost-sorted/
