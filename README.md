@@ -18,6 +18,11 @@
 
 - [x] The Power Sum - https://www.hackerrank.com/challenges/the-power-sum
 - [x] Two Stacks Challenge - https://www.hackerrank.com/challenges/game-of-two-stacks/
+- [x] Largest Rectangle - https://www.hackerrank.com/challenges/largest-rectangle
+
+## 2024
+
+- [x] Not Quite Lisp - https://adventofcode.com/2015/day/1
 
 ## Set up
 
