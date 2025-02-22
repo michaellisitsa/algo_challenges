@@ -12,6 +12,7 @@
 - [x] Almost Sorted - https://www.hackerrank.com/challenges/almost-sorted/
 - [x] Breaking Best and Worst Record - https://www.hackerrank.com/challenges/breaking-best-and-worst-records
 - [x] Strong Password - https://www.hackerrank.com/challenges/recursive-digit-sum
+- [x] Castle on the Grid (HARD) - https://www.hackerrank.com/challenges/castle-on-the-grid/problem
 
 ## 2023
 
