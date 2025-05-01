@@ -15,7 +15,7 @@ function migratoryBirds(arr) {
     };
   }, {});
   const max = Object.values(countArr).reduce((accum, current) =>
-    accum < current ? current : accum
+    accum < current ? current : accum,
   );
   return Object.entries(countArr).reduce((accum, current) => {
     if (current[1] === max && current[0] < accum) {
