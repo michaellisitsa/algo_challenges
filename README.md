@@ -22,7 +22,24 @@
 
 ## 2024
 
-- [x] Not Quite Lisp - https://adventofcode.com/2015/day/1
+Advent of Code 2015 - https://adventofcode.com/2015/
+- [x] 01_not_quite_lisp
+- [x] 04_ideal_stocking_stuffer
+- [x] 05_santas_elves
+- [x] 06_probably_a_fire_hazard
+- [x] 10_look_and_say
+- [x] 16_aunt_sue
+- [x] 18_gif
+- [x] 19_medicine_for_rudolph
+- [x] 20_infinite_houses
+- [x] 21_rpg_20xx 
+
+## 2025
+
+Advent of Code 2024 - https://adventofcode.com/2024
+- [x] 1
+- [x] 2
+- [x] 3
 
 ## Set up
 
