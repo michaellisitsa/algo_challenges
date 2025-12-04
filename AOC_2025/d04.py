@@ -30,7 +30,7 @@ def run():
             next_data = copy(data)
             for data_idx, row in enumerate(adj_matrix):
                 if data[data_idx] == ".":
-                    return
+                    continue
 
                 # Check a single cell of data (row of adjacency matrix) for number of connections
                 edges = 0
