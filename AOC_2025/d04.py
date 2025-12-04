@@ -29,17 +29,21 @@ def run():
         while True:
             next_data = copy(data)
             for data_idx, row in enumerate(adj_matrix):
-                if data[data_idx] == "@":
-                    edges = 0
-                    i = 0
-                    while edges < 4 and i < len(row):
-                        if row[i] is True and data[i] == "@":
-                            edges += 1
-                        i += 1
-                    if edges < 4:
-                        pt1 += 0 if pt1_complete else 1
-                        pt2 += 1
-                        next_data[data_idx] = "."
+                if data[data_idx] == ".":
+                    return
+
+                # Check a single cell of data (row of adjacency matrix) for number of connections
+                edges = 0
+                i = 0
+                while edges < 4 and i < len(row):
+                    edges += 1 if row[i] is True and data[i] == "@" else 0
+                    i += 1
+
+                if edges < 4:
+                    pt1 += 0 if pt1_complete else 1
+                    pt2 += 1
+                    next_data[data_idx] = "."
+
             if next_data == data:
                 break
             data = next_data
