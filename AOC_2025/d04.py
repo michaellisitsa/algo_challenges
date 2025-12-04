@@ -1,4 +1,5 @@
 from pathlib import Path
+from copy import copy
 import numpy as np
 
 
@@ -21,16 +22,29 @@ def grid_adj(N: int) -> np.ndarray:
 def run():
     with open(f"{Path(__file__).parent}/data/04.txt", "r") as f:
         pt1 = 0
-        data = "".join(line.rstrip() for line in f)
-        for data_idx, row in enumerate(grid_adj(139**2).tolist()):
-            if data[data_idx] == "@":
-                edges = 0
-                i = 0
-                while edges < 4 and i < len(row):
-                    edges += 1 if row[i] is True and data[i] == "@" else 0
-                    i += 1
-                pt1 += 1 if edges < 4 else 0
-        return pt1
+        pt2 = 0
+        data = list("".join(line.rstrip() for line in f))
+        adj_matrix = grid_adj(139**2).tolist()
+        pt1_complete = False
+        while True:
+            next_data = copy(data)
+            for data_idx, row in enumerate(adj_matrix):
+                if data[data_idx] == "@":
+                    edges = 0
+                    i = 0
+                    while edges < 4 and i < len(row):
+                        if row[i] is True and data[i] == "@":
+                            edges += 1
+                        i += 1
+                    if edges < 4:
+                        pt1 += 0 if pt1_complete else 1
+                        pt2 += 1
+                        next_data[data_idx] = "."
+            if next_data == data:
+                break
+            data = next_data
+            pt1_complete = True
+        return pt1, pt2
 
 
 if __name__ == "__main__":
