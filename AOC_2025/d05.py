@@ -36,7 +36,6 @@ def pt2():
                 ranges.append({"start": int(start), "end": int(end)})
 
         ranges = sorted(ranges, key=operator.itemgetter("start"))
-        # print(f"{ranges=}")
         compacted_ranges = []
         for idx, rng in enumerate(ranges):
             if not compacted_ranges:
