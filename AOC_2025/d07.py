@@ -20,41 +20,42 @@ def pt1():
                             line_lst[i + 1] = "|"
                         result += 1
                 prev = line_lst
-                # print("".join(line_lst))
         return result
 
 
-num_forks = 0
-
-
-def dfs(lines: list[list[str]], ray_idx: int, line_idx) -> int:
-    global num_forks
-    if ray_idx == 0 or ray_idx == len(lines[0]) - 1:
+def dfs(
+    lines: list[list[str]],
+    ray_idx: int,
+    line_idx,
+    visited_nodes_count: list[list[None | int]],
+) -> int:
+    # The node is outside the range
+    if ray_idx == 0 or ray_idx == len(lines[0]) or line_idx == len(lines):
         return 0
+    # The node has already been visited
+    if (current_count := visited_nodes_count[line_idx][ray_idx]) is not None:
+        return current_count
+
     if len(lines) - line_idx > 0:
         if lines[line_idx][ray_idx] == ".":
-            return dfs(lines, ray_idx, line_idx + 1)
-        else:
-            # Has '^'
-            # this
-            # . | . . . # exclude
-            # . ^ . . .
-            # | . . . .
-            # and
-            # . | . . . # exclude
-            # . ^ . . .
-            # . . | . .
-            num_forks += 1
-            return dfs(lines, ray_idx - 1, line_idx + 1) + dfs(
-                lines, ray_idx + 1, line_idx + 1
+            visited_nodes_count[line_idx][ray_idx] = dfs(
+                lines, ray_idx, line_idx + 1, visited_nodes_count
             )
+            return visited_nodes_count[line_idx][ray_idx]
+        else:
+            visited_nodes_count[line_idx][ray_idx] = (
+                1
+                + dfs(lines, ray_idx - 1, line_idx + 1, visited_nodes_count)
+                + dfs(lines, ray_idx + 1, line_idx + 1, visited_nodes_count)
+            )
+
+            return visited_nodes_count[line_idx][ray_idx]
     # No lines left
     return 0
 
 
 def pt2():
     lines: list[list[str]] = []
-    global num_forks
     with open(f"{Path(__file__).parent}/data/07.txt", "r") as f:
         ray_idx = 0
         for idx, line in enumerate(f):
@@ -65,14 +66,11 @@ def pt2():
             else:
                 lines.append(list(line.rstrip()))
 
-        # This is just for testing.
-        # Increases exponentially, too slow beyond 85
-        for i in range(69, 80, 2):
-            num_forks = 1
-            dfs(lines[:i], ray_idx, 0)
-            print(f"rows:{i} count:{num_forks=}")
+        visited_nodes_count = [
+            [None for i in range(len(lines))] for i in range(len(lines[0]))
+        ]
+        return dfs(lines, ray_idx, 0, visited_nodes_count) + 1
 
 
 if __name__ == "__main__":
     print(f"{pt1()=} {pt2()=}")
-    # print(num_visits)
