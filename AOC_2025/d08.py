@@ -4,14 +4,14 @@ from itertools import combinations
 from math import sqrt
 
 
-def pt1():
-    result = None
+def run():
+    pt1 = None
     coords = []
     pq = []
     disjoint_sets = []
     coord_to_set = {}
+    part1 = 0
     with open(f"{Path(__file__).parent}/data/08.txt", "r") as f:
-        result = 0
         # for each  pair of  points On^2  we  calculate their distance from each other in 3d space.
         for line in f:
             coords.append(
@@ -25,7 +25,19 @@ def pt1():
             # https://stackoverflow.com/questions/45137002/define-heap-key-for-an-array-of-tuples#45137076
             heapq.heappush(pq, (distance, pt1, pt2))
         i = 0
-        while i < len(pq) - 1 and i < 1000 and len(coord_to_set) <= len(coords):
+        last_x_1 = 0
+        last_x_2 = 0
+        while (
+            not disjoint_sets
+            # horribly inefficient to sort every time
+            or len(sorted(disjoint_sets, key=lambda val: len(val), reverse=True)[0])
+        ) < len(coords):
+            if i == 1000:
+                for disjoint_set in sorted(
+                    disjoint_sets, key=lambda val: len(val), reverse=True
+                )[:3]:
+                    part1 = len(disjoint_set) * part1 if part1 else len(disjoint_set)
+
             distance, pt1, pt2 = heapq.heappop(pq)
             if pt1 in coord_to_set and pt2 in coord_to_set:
                 # Join 2 disjoint sets
@@ -53,13 +65,12 @@ def pt1():
                 disjoint_sets.append({pt1, pt2})
                 coord_to_set[pt1] = len(disjoint_sets) - 1
                 coord_to_set[pt2] = len(disjoint_sets) - 1
+            last_x_1 = pt1[0]
+            last_x_2 = pt2[0]
             i += 1
-        disjoint_sets = sorted(disjoint_sets, key=lambda val: len(val), reverse=True)
-        for disjoint_set in disjoint_sets[:3]:
-            result = len(disjoint_set) * result if result else len(disjoint_set)
 
-        return result
+        return part1, last_x_1 * last_x_2
 
 
 if __name__ == "__main__":
-    print(f"{pt1()=}")
+    print(f"{run()=}")
