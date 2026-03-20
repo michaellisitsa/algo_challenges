@@ -1,6 +1,3 @@
-import pandas as pd
-
-# DISCOUNTS_PER_ITEM = [[1, 0, 1, 0], [0, 1, 1, 1], [0, 0, 0, 1]]
 DISCOUNT_MAP = [
     {"price": 10, "applies": lambda idx: idx == 0, "bundle": 0},
     {"price": 10, "applies": lambda idx: idx == 1, "bundle": 0},
@@ -21,34 +18,27 @@ def run(discounts: list[dict], items: list[dict[str, int]]) -> list[list[int]]:
     if not items:
         return []
 
-    qtys = pd.Series([item["qty"] for item in items])
-    prices = pd.Series([d["price"] for d in discounts], dtype=float)
-    is_bundle = pd.Series([bool(d["bundle"]) for d in discounts])
+    matrix = [
+        [int(d["applies"](i)) for d in discounts]
+        for i in range(len(items))
+    ]
 
-    # Build matrix: rows=items, cols=discounts
-    df = pd.DataFrame(
-        {i: [int(d["applies"](j)) for j in range(len(items))] for i, d in enumerate(discounts)}
-    )
+    def bundle_cols(row):
+        return [col for col, val in enumerate(row) if val and discounts[col]["bundle"]]
 
-    while True:
-        bundle_df = df.loc[:, is_bundle]
-        conflict_mask = bundle_df.sum(axis=1) > 1
-        if not conflict_mask.any():
-            break
-
-        # First item with conflicting bundle discounts
-        row_idx = conflict_mask.idxmax()
-        conflict_cols = bundle_df.columns[bundle_df.loc[row_idx] == 1]
-
-        # value = price * min_qty across items covered by the discount
-        totals = pd.Series(
-            {col: prices[col] * qtys[df[col] == 1].min() for col in conflict_cols}
+    def discount_total(col):
+        return discounts[col]["price"] * min(
+            items[row]["qty"] for row in range(len(items)) if matrix[row][col]
         )
-        best_col = totals.idxmax()
 
-        df[conflict_cols.difference([best_col])] = 0
+    while conflict := next((bundle_cols(row) for row in matrix if len(bundle_cols(row)) > 1), None):
+        best = max(conflict, key=discount_total)
+        for col in conflict:
+            if col != best:
+                for row in matrix:
+                    row[col] = 0
 
-    return df.values.tolist()
+    return matrix
 
 
 if __name__ == "__main__":
